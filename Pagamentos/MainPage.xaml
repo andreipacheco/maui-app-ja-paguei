@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Pagamentos.MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,0"
+            Spacing="25">
+            <Image
+                Source="logo.jpg"
+                HeightRequest="155"
+                Aspect="AspectFit"
+                SemanticProperties.Description="dot net bot in a race car number eight" />
+
+            <Label
+                Text="Adicionar nova conta:"
+                Style="{StaticResource Headline}"
+                SemanticProperties.HeadingLevel="Level1" />
+
+            <Entry x:Name="NovaConta"/>
+            <Button
+                x:Name="CounterBtn"
+                Text="Adicionar" 
+                SemanticProperties.Hint="Counts the number of times you click"
+                Clicked="AddClicked"
+                HorizontalOptions="Fill" />
+            
+            <Label
+                Text="Minhas contas:"
+                Style="{StaticResource SubHeadline}"
+                SemanticProperties.HeadingLevel="Level2"
+                SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
+
+            <ListView x:Name="ListaContas"
+                      ItemsSource="{Binding Contas}"
+                      ItemTapped="OnContaTapped">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="10">
+                                <Label Text="{Binding Name}" VerticalOptions="Center"/>
+                                <CheckBox IsChecked="{Binding IsPaid, Mode=TwoWay}" 
+                                          HorizontalOptions="EndAndExpand" VerticalOptions="Center"
+                                          CheckedChanged="OnCheckedChanged" />  
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
