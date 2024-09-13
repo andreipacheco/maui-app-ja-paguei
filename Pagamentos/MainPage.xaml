@@ -7,16 +7,11 @@
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
-            <!--<Image
-                Source="logo.jpg"
-                HeightRequest="155"
-                Aspect="AspectFit"
-                SemanticProperties.Description="dot net bot in a race car number eight" /> -->
             <StackLayout Orientation="Horizontal" 
                          VerticalOptions="Center"
                          Margin="3">
                 <Label
-                   HorizontalOptions="Start"
+                    HorizontalOptions="Start"
                     VerticalOptions="Center"
                     Text="Mês de referência"
                     FontSize="Medium"/>
@@ -48,15 +43,19 @@
                         Clicked="salvarMesReferencia_Clicked"/>
             </StackLayout>
 
-            <StackLayout Orientation="Vertical">
+            <StackLayout Orientation="Horizontal"
+                         VerticalOptions="Center"
+                         HorizontalOptions="FillAndExpand"
+                         Margin="3">
 
                 <Entry x:Name="NovaConta"
+                        HorizontalOptions="FillAndExpand"
                        Placeholder="Adicionar nova conta"/>
 
                 <Button
                     x:Name="AddBtn"
-                    Text="Adicionar"
-                    SemanticProperties.Hint="Counts the number of times you click"
+                    ImageSource="add.png"
+                    HeightRequest="40"
                     Clicked="AddClicked"
                     HorizontalOptions="Fill" />
             </StackLayout>
