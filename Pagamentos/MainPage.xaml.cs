@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Text.Json;
 
+
 namespace Pagamentos
 {
     public partial class MainPage : ContentPage
@@ -12,6 +13,9 @@ namespace Pagamentos
         public MainPage()
         {
             InitializeComponent();
+
+            // Carrega o mês de referência salvo
+            LoadMesReferencia();
 
             // Carrega as contas do Preferences
             LoadContas();
@@ -32,7 +36,6 @@ namespace Pagamentos
             SaveContas();
         }
 
-        // Evento disparado quando o valor do CheckBox é alterado
         private void OnCheckedChanged(object sender, CheckedChangedEventArgs e)
         {
             var checkbox = sender as CheckBox;
@@ -56,22 +59,21 @@ namespace Pagamentos
                 // Mostra a data de pagamento da conta em um DisplayAlert
                 DisplayAlert("Informação de Pagamento", $"Conta paga em: {contaSelecionada.Date}", "OK");
             }
-            else {
-                DisplayAlert("Atenção!","Essa conta ainda não foi paga!", "OK");
+            else
+            {
+                DisplayAlert("Atenção!", "Essa conta ainda não foi paga!", "OK");
             }
 
             // Desmarca o item após a seleção para evitar que fique selecionado visualmente
-             ((ListView)sender).SelectedItem = null;
+            ((ListView)sender).SelectedItem = null;
         }
 
-        // Método para salvar a lista de contas no Preferences
         private void SaveContas()
         {
             var contasJson = JsonSerializer.Serialize(contas);
             Preferences.Set("contas", contasJson);
         }
 
-        // Método para carregar a lista de contas do Preferences
         private void LoadContas()
         {
             var contasJson = Preferences.Get("contas", string.Empty);
@@ -84,6 +86,63 @@ namespace Pagamentos
                 {
                     contas.Add(conta);
                 }
+            }
+        }
+
+        private void DeleteButton_Clicked(object sender, EventArgs e)
+        {
+            var contaSelecionada = sender as Conta;
+            // var contaSelecionada = e.Item as Conta;
+            Console.WriteLine("contaSelecionada");
+            Console.WriteLine(e);
+            if (contaSelecionada != null)
+            {
+                // Confirmação antes de deletar
+                bool confirm = DisplayAlert("Remover Conta", $"Deseja remover a conta \"{contaSelecionada.Name}\"?", "Sim", "Não").Result;
+
+                if (confirm)
+                {
+                    // Remove a conta da ObservableCollection
+                    contas.Remove(contaSelecionada);
+
+                    // Atualiza as contas no Preferences
+                    SaveContas();
+
+                    // Alerta de sucesso
+                    DisplayAlert("Menos uma!!", "Conta deletada com sucesso!", "OK");
+                }
+            }
+        }
+
+        private void LoadMesReferencia()
+        {
+            // Recupera o mês de referência salvo no Preferences
+            var mesSalvo = Preferences.Get("mesReferencia", string.Empty);
+
+            if (!string.IsNullOrEmpty(mesSalvo))
+            {
+                // Define o mês salvo como o item selecionado no Picker
+                picker.SelectedItem = mesSalvo;
+            }
+        }
+
+        private void salvarMesReferencia_Clicked(object sender, EventArgs e)
+        {
+            // Obtém o valor selecionado no Picker
+            var mesSelecionado = picker.SelectedItem?.ToString();
+
+            if (!string.IsNullOrEmpty(mesSelecionado))
+            {
+                // Persiste o mês selecionado no Preferences
+                Preferences.Set("mesReferencia", mesSelecionado);
+
+                // Exibe uma mensagem de confirmação
+                DisplayAlert("Sucesso", $"Mês de referência '{mesSelecionado}' salvo com sucesso!", "OK");
+            }
+            else
+            {
+                // Exibe um alerta se nenhum mês foi selecionado
+                DisplayAlert("Atenção", "Por favor, selecione um mês de referência.", "OK");
             }
         }
     }

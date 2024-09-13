@@ -7,30 +7,66 @@
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
-            <Image
+            <!--<Image
                 Source="logo.jpg"
                 HeightRequest="155"
                 Aspect="AspectFit"
-                SemanticProperties.Description="dot net bot in a race car number eight" />
+                SemanticProperties.Description="dot net bot in a race car number eight" /> -->
+            <StackLayout Orientation="Horizontal" 
+                         VerticalOptions="Center"
+                         Margin="3">
+                <Label
+                   HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                    Text="Mês de referência"
+                    FontSize="Medium"/>
 
-            <Label
-                Text="Adicionar nova conta:"
-                Style="{StaticResource Headline}"
-                SemanticProperties.HeadingLevel="Level1" />
+                <Picker x:Name="picker"
+                        Title="Selecione o mês de referência: "
+                        HorizontalOptions="FillAndExpand">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Janeiro</x:String>
+                            <x:String>Fevereiro</x:String>
+                            <x:String>Março</x:String>
+                            <x:String>Abril</x:String>
+                            <x:String>Maio</x:String>
+                            <x:String>Junho</x:String>
+                            <x:String>julho</x:String>
+                            <x:String>Agosto</x:String>
+                            <x:String>Setembro</x:String>
+                            <x:String>Outubro</x:String>
+                            <x:String>Novembro</x:String>
+                            <x:String>Dezembro</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+                <Button x:Name="salvarMesReferencia"
+                        HorizontalOptions="EndAndExpand"
+                        ImageSource="save.png"
+                        HeightRequest="40"
+                        Clicked="salvarMesReferencia_Clicked"/>
+            </StackLayout>
 
-            <Entry x:Name="NovaConta"/>
-            <Button
-                x:Name="CounterBtn"
-                Text="Adicionar"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="AddClicked"
-                HorizontalOptions="Fill" />
-            
+            <StackLayout Orientation="Vertical">
+                <Label
+                    Text="Adicionar nova conta:"
+                    FontSize="Subtitle"/>
+
+                <Entry x:Name="NovaConta"/>
+
+                <Button
+                    x:Name="AddBtn"
+                    Text="Adicionar"
+                    SemanticProperties.Hint="Counts the number of times you click"
+                    Clicked="AddClicked"
+                    HorizontalOptions="Fill" />
+            </StackLayout>
             <Label
                 Text="Minhas contas:"
                 Style="{StaticResource SubHeadline}"
                 SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
+             />
 
             <ListView x:Name="ListaContas"
                       ItemsSource="{Binding Contas}"
@@ -42,7 +78,12 @@
                                 <Label Text="{Binding Name}" VerticalOptions="Center"/>
                                 <CheckBox IsChecked="{Binding IsPaid, Mode=TwoWay}" 
                                           HorizontalOptions="EndAndExpand" VerticalOptions="Center"
-                                          CheckedChanged="OnCheckedChanged" />  
+                                          CheckedChanged="OnCheckedChanged" />
+                                <Button x:Name="DeleteButton"
+                                        ImageSource="delete.png"
+                                        HeightRequest="40"
+                                        Clicked="DeleteButton_Clicked"
+                                        />
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>

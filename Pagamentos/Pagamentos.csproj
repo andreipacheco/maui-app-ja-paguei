@@ -47,7 +47,6 @@
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -57,8 +56,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\Images\conta.jpeg" />
+	  <None Remove="Resources\Images\delete.png" />
 	  <None Remove="Resources\Images\logo.jpg" />
+	  <None Remove="Resources\Images\save.png" />
 	</ItemGroup>
 
 	<ItemGroup>
