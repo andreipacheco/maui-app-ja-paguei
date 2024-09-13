@@ -49,11 +49,9 @@
             </StackLayout>
 
             <StackLayout Orientation="Vertical">
-                <Label
-                    Text="Adicionar nova conta:"
-                    FontSize="Subtitle"/>
 
-                <Entry x:Name="NovaConta"/>
+                <Entry x:Name="NovaConta"
+                       Placeholder="Adicionar nova conta"/>
 
                 <Button
                     x:Name="AddBtn"
@@ -70,25 +68,41 @@
 
             <ListView x:Name="ListaContas"
                       ItemsSource="{Binding Contas}"
-                      ItemTapped="OnContaTapped">
+                      ItemTapped="OnContaTapped"
+                      HorizontalOptions="FillAndExpand">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="10">
                                 <Label Text="{Binding Name}" VerticalOptions="Center"/>
                                 <CheckBox IsChecked="{Binding IsPaid, Mode=TwoWay}" 
-                                          HorizontalOptions="EndAndExpand" VerticalOptions="Center"
-                                          CheckedChanged="OnCheckedChanged" />
+                                          HorizontalOptions="EndAndExpand"
+                                          VerticalOptions="Center"
+                                          CheckedChanged="OnCheckedChanged">
+                                    <CheckBox.Triggers>
+                                        <DataTrigger TargetType="CheckBox" Binding="{Binding IsPaid}" Value="True">
+                                            <Setter Property="Color" Value="Green"/>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="CheckBox" Binding="{Binding IsPaid}" Value="False">
+                                            <Setter Property="Color" Value="Red"/>
+                                        </DataTrigger>
+                                    </CheckBox.Triggers>
+                                </CheckBox>
                                 <Button x:Name="DeleteButton"
                                         ImageSource="delete.png"
                                         HeightRequest="40"
                                         Clicked="DeleteButton_Clicked"
-                                        />
+                                        CommandParameter="{Binding .}" />           
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <Label
+                   Text="v.1.0"
+                   VerticalOptions="EndAndExpand"
+                   HorizontalOptions="Center"
+            />
         </VerticalStackLayout>
     </ScrollView>
 

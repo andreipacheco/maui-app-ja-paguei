@@ -10,6 +10,7 @@ namespace Pagamentos
         ObservableCollection<Conta> contas = new ObservableCollection<Conta>();
         public ObservableCollection<Conta> Contas { get { return contas; } }
 
+
         public MainPage()
         {
             InitializeComponent();
@@ -41,12 +42,20 @@ namespace Pagamentos
             var checkbox = sender as CheckBox;
             var conta = checkbox.BindingContext as Conta;
 
-            if (conta != null && conta.IsPaid) // Se o item foi marcado como pago
+            if (conta != null)
             {
-                // Persistir a data atual no campo "Date" quando for pago
-                conta.Date = DateTime.Now.ToString("dd/MM/yyyy");
+                if (conta.IsPaid) // Se o item foi marcado como pago
+                {
+                    // Persistir a data atual no campo "Date" quando for pago
+                    conta.Date = DateTime.Now.ToString("dd/MM/yyyy");
+                }
+                else // Se o item foi desmarcado
+                {
+                    // Limpar a data se o pagamento foi desmarcado
+                    conta.Date = string.Empty;
+                }
 
-                // Salva as contas atualizadas no Preferences
+                // Salva as contas atualizadas no Preferences, independentemente de estar marcado ou desmarcado
                 SaveContas();
             }
         }
@@ -57,7 +66,7 @@ namespace Pagamentos
             if (contaSelecionada != null && !string.IsNullOrEmpty(contaSelecionada.Date))
             {
                 // Mostra a data de pagamento da conta em um DisplayAlert
-                DisplayAlert("Informação de Pagamento", $"Conta paga em: {contaSelecionada.Date}", "OK");
+                DisplayAlert("Informação de Pagamento", $"{contaSelecionada.Name} paga em: {contaSelecionada.Date}", "OK");
             }
             else
             {
@@ -89,27 +98,29 @@ namespace Pagamentos
             }
         }
 
-        private void DeleteButton_Clicked(object sender, EventArgs e)
+        private async void DeleteButton_Clicked(object sender, EventArgs e)
         {
-            var contaSelecionada = sender as Conta;
-            // var contaSelecionada = e.Item as Conta;
-            Console.WriteLine("contaSelecionada");
-            Console.WriteLine(e);
+            // Obtém o botão que foi clicado
+            var button = sender as Button;
+
+            // Obtém a conta associada ao botão (via CommandParameter)
+            var contaSelecionada = button.BindingContext as Conta;
+
             if (contaSelecionada != null)
             {
-                // Confirmação antes de deletar
-                bool confirm = DisplayAlert("Remover Conta", $"Deseja remover a conta \"{contaSelecionada.Name}\"?", "Sim", "Não").Result;
+                // Exibe a confirmação de deleção
+                bool confirm = await DisplayAlert("Remover Conta", $"Deseja remover a conta \"{contaSelecionada.Name}\"?", "Sim", "Não");
 
                 if (confirm)
                 {
                     // Remove a conta da ObservableCollection
                     contas.Remove(contaSelecionada);
 
-                    // Atualiza as contas no Preferences
+                    // Atualiza o Preferences
                     SaveContas();
 
-                    // Alerta de sucesso
-                    DisplayAlert("Menos uma!!", "Conta deletada com sucesso!", "OK");
+                    // Exibe um alerta de sucesso
+                    await DisplayAlert("Sucesso", "Conta deletada com sucesso!", "OK");
                 }
             }
         }
