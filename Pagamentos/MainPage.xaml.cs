@@ -56,8 +56,12 @@ namespace Pagamentos
                 // Mostra a data de pagamento da conta em um DisplayAlert
                 DisplayAlert("Informação de Pagamento", $"Conta paga em: {contaSelecionada.Date}", "OK");
             }
+            else {
+                DisplayAlert("Atenção!","Essa conta ainda não foi paga!", "OK");
+            }
 
-            // TODO: Após clicar em um item ele fica selecionado, ajustar.
+            // Desmarca o item após a seleção para evitar que fique selecionado visualmente
+             ((ListView)sender).SelectedItem = null;
         }
 
         // Método para salvar a lista de contas no Preferences

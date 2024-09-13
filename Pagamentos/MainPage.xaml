@@ -21,7 +21,7 @@
             <Entry x:Name="NovaConta"/>
             <Button
                 x:Name="CounterBtn"
-                Text="Adicionar" 
+                Text="Adicionar"
                 SemanticProperties.Hint="Counts the number of times you click"
                 Clicked="AddClicked"
                 HorizontalOptions="Fill" />
