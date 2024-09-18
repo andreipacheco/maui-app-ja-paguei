@@ -21,10 +21,10 @@
 		<Nullable>enable</Nullable>
 
 		<!-- Display name -->
-		<ApplicationTitle>Pagamentos</ApplicationTitle>
+		<ApplicationTitle>Já Paguei?</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.pagamentos</ApplicationId>
+		<ApplicationId>com.apachecorp.japaguei</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -40,11 +40,11 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\icon.svg" BaseSize="128,128" Color="#ac99ea"/>
 
 		<!-- Splash Screen -->
 		<!-- Images -->
-		<MauiSplashScreen Include="Resources\Splash\splash2.svg" BaseSize="128,128">
+		<MauiSplashScreen Include="Resources\Splash\splash2.svg" BaseSize="128,128" Color="#ac99ea">
 		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</MauiSplashScreen>
 
@@ -59,6 +59,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\AppIcon\icon.svg" />
 	  <None Remove="Resources\Images\add.png" />
 	  <None Remove="Resources\Images\delete.png" />
 	  <None Remove="Resources\Images\logo.jpg" />

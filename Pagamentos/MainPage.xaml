@@ -98,7 +98,7 @@
                 </ListView.ItemTemplate>
             </ListView>
             <Label
-                   Text="v.1.0"
+                   Text="v.1.1"
                    VerticalOptions="EndAndExpand"
                    HorizontalOptions="Center"
             />
