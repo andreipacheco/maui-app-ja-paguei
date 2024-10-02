@@ -10,9 +10,6 @@ namespace Pagamentos
         ObservableCollection<Conta> contas = new ObservableCollection<Conta>();
         public ObservableCollection<Conta> Contas { get { return contas; } }
 
-        // #TODO: Botão de Histórico de meses.
-        // #TODO: Botão de Salvar Histórico dos pagamentos relacionados a um mês.
-
         public MainPage()
         {
             InitializeComponent();
