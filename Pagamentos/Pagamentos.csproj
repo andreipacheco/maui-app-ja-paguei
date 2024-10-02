@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks>net8.0-ios;net8.0-maccatalyst;net8.0-android34.0</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
@@ -40,7 +40,7 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\icon.svg" BaseSize="128,128" Color="#ac99ea"/>
+		<MauiIcon Include="Resources\AppIcon\icon.svg" BaseSize="128,128" Color="#ac99ea" />
 
 		<!-- Splash Screen -->
 		<!-- Images -->
@@ -62,16 +62,24 @@
 	  <None Remove="Resources\AppIcon\icon.svg" />
 	  <None Remove="Resources\Images\add.png" />
 	  <None Remove="Resources\Images\delete.png" />
+	  <None Remove="Resources\Images\history.png" />
 	  <None Remove="Resources\Images\logo.jpg" />
 	  <None Remove="Resources\Images\save.png" />
+	  <None Remove="Resources\Images\update.png" />
 	  <None Remove="Resources\Splash\splash2.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.91" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.91" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.72" />
+		<PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.91" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="HistoricoPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>

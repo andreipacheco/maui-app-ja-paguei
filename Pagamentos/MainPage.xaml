@@ -97,8 +97,41 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
+            <StackLayout Orientation="Horizontal" 
+                         VerticalOptions="Center"
+                         Margin="3">
+                <Label
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        Text="Salvar Histórico do Mês"
+                        FontSize="Medium"/>
+
+                <Button x:Name="salvarHistoricoMesReferencia"
+                        HorizontalOptions="EndAndExpand"
+                        ImageSource="update.png"
+                        HeightRequest="40"
+                        Clicked="salvarHistoricoMesReferencia_Clicked"/>
+
+              
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal" 
+                VerticalOptions="Center"
+                Margin="3">
+                <Label
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       Text="Histórico de Pagamentos"
+                       FontSize="Medium"/>
+                <Button x:Name="historicoMesReferencia"
+                        HorizontalOptions="EndAndExpand"
+                        ImageSource="history.png"
+                        HeightRequest="40"
+                        Clicked="historicoMesReferencia_Clicked"/>
+            </StackLayout>
             <Label
-                   Text="v.1.1"
+                   Text="v.1.2"
                    VerticalOptions="EndAndExpand"
                    HorizontalOptions="Center"
             />

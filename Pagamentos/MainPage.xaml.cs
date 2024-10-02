@@ -10,6 +10,8 @@ namespace Pagamentos
         ObservableCollection<Conta> contas = new ObservableCollection<Conta>();
         public ObservableCollection<Conta> Contas { get { return contas; } }
 
+        // #TODO: Botão de Histórico de meses.
+        // #TODO: Botão de Salvar Histórico dos pagamentos relacionados a um mês.
 
         public MainPage()
         {
@@ -155,6 +157,66 @@ namespace Pagamentos
                 // Exibe um alerta se nenhum mês foi selecionado
                 DisplayAlert("Atenção", "Por favor, selecione um mês de referência.", "OK");
             }
+        }
+
+        private void salvarHistoricoMesReferencia_Clicked(object sender, EventArgs e)
+        {
+            // Verifica se todas as contas estão pagas
+            var contasNaoPagas = contas.Where(c => !c.IsPaid).ToList();
+
+            if (contasNaoPagas.Count > 0)
+            {
+                // Alerta o usuário que ainda há contas não pagas
+                DisplayAlert("Atenção", "Ainda há contas não pagas. Por favor, quite todas as contas antes de salvar o histórico.", "OK");
+                return;
+            }
+
+            // Se todas as contas foram pagas, salvar o histórico
+            var mesSelecionado = picker.SelectedItem?.ToString();
+            if (string.IsNullOrEmpty(mesSelecionado))
+            {
+                DisplayAlert("Atenção", "Por favor, selecione um mês de referência.", "OK");
+                return;
+            }
+
+            // Armazena o histórico de contas pagas com as respectivas datas usando a nova classe HistoricoConta
+            var contasPagasHistorico = contas.Select(c => new HistoricoConta { Name = c.Name, Date = c.Date }).ToList();
+
+            // Serializa o histórico para salvar no Preferences
+            var historicoJson = JsonSerializer.Serialize(contasPagasHistorico);
+
+            // Salva o histórico com o nome do mês como chave no Preferences
+            Preferences.Set($"historico_{mesSelecionado}", historicoJson);
+
+            // Exibe uma mensagem de sucesso
+            DisplayAlert("Sucesso", $"Histórico do mês de '{mesSelecionado}' salvo com sucesso!", "OK");
+        }
+
+        private void historicoMesReferencia_Clicked(object sender, EventArgs e)
+        {
+            // Obtém o mês selecionado no Picker
+            var mesSelecionado = picker.SelectedItem?.ToString();
+
+            if (string.IsNullOrEmpty(mesSelecionado))
+            {
+                DisplayAlert("Atenção", "Por favor, selecione um mês de referência.", "OK");
+                return;
+            }
+
+            // Carrega o histórico do mês selecionado do Preferences
+            var historicoJson = Preferences.Get($"historico_{mesSelecionado}", string.Empty);
+
+            if (string.IsNullOrEmpty(historicoJson))
+            {
+                DisplayAlert("Atenção", $"Não há histórico salvo para o mês de '{mesSelecionado}'.", "OK");
+                return;
+            }
+
+            // Desserializa o histórico
+            var historico = JsonSerializer.Deserialize<List<HistoricoConta>>(historicoJson);
+
+            // Navega para a página de histórico e passa os dados
+            Navigation.PushAsync(new HistoricoPage(historico));
         }
     }
 }
