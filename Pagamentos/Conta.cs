@@ -1,6 +1,14 @@
-﻿public class Conta
+﻿using SQLite;
+
+namespace Pagamentos
 {
-    public string Name { get; set; }
-    public Boolean IsPaid { get; set; }
-    public string Date { get; set; }
+    public class Conta
+    {
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+        public bool IsPaid { get; set; }
+        public string Date { get; set; }
+    }
 }

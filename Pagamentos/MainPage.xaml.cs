@@ -1,4 +1,5 @@
 ﻿
+using Pagamentos;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 
@@ -9,16 +10,20 @@ namespace Pagamentos
     {
         ObservableCollection<Conta> contas = new ObservableCollection<Conta>();
         public ObservableCollection<Conta> Contas { get { return contas; } }
-
+        private DatabaseService _databaseService;
         public MainPage()
         {
             InitializeComponent();
 
-            // Carrega o mês de referência salvo
-            LoadMesReferencia();
+            // Inicializa o caminho do banco
+            string dbPath = Path.Combine(FileSystem.AppDataDirectory, "contas.db3");
+            _databaseService = new DatabaseService(dbPath);
 
-            // Carrega as contas do Preferences
-            LoadContas();
+            // Carrega dados
+            LoadContasFromDb();
+
+            // Carrega o mês
+            LoadMesReferencia();
 
             // Configura o ItemsSource do ListView
             ListaContas.ItemsSource = contas;
@@ -26,36 +31,38 @@ namespace Pagamentos
 
         private void AddClicked(object sender, EventArgs e)
         {
-            // Adiciona nova conta à lista
-            contas.Add(new Conta { Name = NovaConta.Text, IsPaid = false, Date = "" });
+            var novaConta = new Conta { Name = NovaConta.Text, IsPaid = false, Date = "" };
+            contas.Add(novaConta);
+            SaveConta(novaConta);
 
-            // Limpa campo da Entry
             NovaConta.Text = "";
-
-            // Salva as contas no Preferences
-            SaveContas();
         }
 
-        private void OnCheckedChanged(object sender, CheckedChangedEventArgs e)
+        private async void OnCheckedChanged(object sender, CheckedChangedEventArgs e)
         {
             var checkbox = sender as CheckBox;
             var conta = checkbox.BindingContext as Conta;
 
             if (conta != null)
             {
-                if (conta.IsPaid) // Se o item foi marcado como pago
+                if (conta.IsPaid)
                 {
-                    // Persistir a data atual no campo "Date" quando for pago
                     conta.Date = DateTime.Now.ToString("dd/MM/yyyy");
+
+                    // Adiciona no histórico
+                    var historico = new HistoricoConta
+                    {
+                        Name = conta.Name,
+                        Date = conta.Date
+                    };
+                    await _databaseService.SaveHistoricoAsync(historico);
                 }
-                else // Se o item foi desmarcado
+                else
                 {
-                    // Limpar a data se o pagamento foi desmarcado
                     conta.Date = string.Empty;
                 }
 
-                // Salva as contas atualizadas no Preferences, independentemente de estar marcado ou desmarcado
-                SaveContas();
+                SaveConta(conta);
             }
         }
 
@@ -76,10 +83,18 @@ namespace Pagamentos
             ((ListView)sender).SelectedItem = null;
         }
 
-        private void SaveContas()
+        private async void SaveConta(Conta conta)
         {
-            var contasJson = JsonSerializer.Serialize(contas);
-            Preferences.Set("contas", contasJson);
+            await _databaseService.SaveContaAsync(conta);
+        }
+
+        private async void LoadContasFromDb()
+        {
+            var contasList = await _databaseService.GetContasAsync();
+            foreach (var conta in contasList)
+            {
+                contas.Add(conta);
+            }
         }
 
         private void LoadContas()
@@ -99,26 +114,18 @@ namespace Pagamentos
 
         private async void DeleteButton_Clicked(object sender, EventArgs e)
         {
-            // Obtém o botão que foi clicado
             var button = sender as Button;
-
-            // Obtém a conta associada ao botão (via CommandParameter)
             var contaSelecionada = button.BindingContext as Conta;
 
             if (contaSelecionada != null)
             {
-                // Exibe a confirmação de deleção
                 bool confirm = await DisplayAlert("Remover Conta", $"Deseja remover a conta \"{contaSelecionada.Name}\"?", "Sim", "Não");
 
                 if (confirm)
                 {
-                    // Remove a conta da ObservableCollection
                     contas.Remove(contaSelecionada);
+                    await _databaseService.DeleteContaAsync(contaSelecionada);
 
-                    // Atualiza o Preferences
-                    SaveContas();
-
-                    // Exibe um alerta de sucesso
                     await DisplayAlert("Sucesso", "Conta deletada com sucesso!", "OK");
                 }
             }
