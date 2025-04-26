@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using System.Text.Json.Serialization;
 
 public class HistoricoConta
 {
@@ -6,6 +7,7 @@ public class HistoricoConta
     public int Id { get; set; }
 
     public string Name { get; set; }
-    public string Date { get; set; }
+    [JsonConverter(typeof(JsonDateConverter))]
+    public DateTime Date { get; set; }
 }
 

@@ -2,83 +2,72 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Pagamentos.MainPage"
-             Title="Já Paguei !?">
+             Title="Já Paguei !?"
+             BackgroundColor="#F7F7F7">
 
     <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
-            <StackLayout Orientation="Horizontal" 
-                         VerticalOptions="Center"
-                         Margin="3">
-                <Label
-                    HorizontalOptions="Start"
-                    VerticalOptions="Center"
-                    Text="Mês de referência"
-                    FontSize="Medium"/>
+        <VerticalStackLayout Padding="20" Spacing="20">
 
-                <Picker x:Name="picker"
-                        Title="Selecione o mês de referência: "
-                        HorizontalOptions="FillAndExpand">
-                    <Picker.ItemsSource>
-                        <x:Array Type="{x:Type x:String}">
-                            <x:String>Janeiro</x:String>
-                            <x:String>Fevereiro</x:String>
-                            <x:String>Março</x:String>
-                            <x:String>Abril</x:String>
-                            <x:String>Maio</x:String>
-                            <x:String>Junho</x:String>
-                            <x:String>julho</x:String>
-                            <x:String>Agosto</x:String>
-                            <x:String>Setembro</x:String>
-                            <x:String>Outubro</x:String>
-                            <x:String>Novembro</x:String>
-                            <x:String>Dezembro</x:String>
-                        </x:Array>
-                    </Picker.ItemsSource>
-                </Picker>
-                <Button x:Name="salvarMesReferencia"
-                        HorizontalOptions="EndAndExpand"
-                        ImageSource="save.png"
-                        HeightRequest="40"
-                        Clicked="salvarMesReferencia_Clicked"/>
-            </StackLayout>
+            <!-- Mês de referência -->
+            <Frame CornerRadius="15" Padding="10" BackgroundColor="White" HasShadow="True">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Mês de referência" FontSize="Medium" TextColor="#333333"/>
+                    <Picker x:Name="picker"
+                            Title="Selecione o mês"
+                            HorizontalOptions="FillAndExpand" 
+                            TextColor="#333333"/>
+                    <Button x:Name="salvarMesReferencia"
+                            Text="Salvar mês"
+                            ImageSource="save.png"
+                            BackgroundColor="#4CAF50"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="45"
+                            Clicked="salvarMesReferencia_Clicked"/>
+                </VerticalStackLayout>
+            </Frame>
 
-            <StackLayout Orientation="Horizontal"
-                         VerticalOptions="Center"
-                         HorizontalOptions="FillAndExpand"
-                         Margin="3">
+            <!-- Adicionar nova conta -->
+            <Frame CornerRadius="15" Padding="10" BackgroundColor="White" HasShadow="True">
+                <VerticalStackLayout Spacing="10">
+                    <Entry x:Name="NovaConta"
+                           TextColor="#333333"
+                           Placeholder="Adicionar nova conta"
+                           HorizontalOptions="FillAndExpand"/>
+                    <Button x:Name="AddBtn"
+                            Text="Adicionar"
+                            ImageSource="add.png"
+                            BackgroundColor="#2196F3"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="45"
+                            Clicked="AddClicked" />
+                </VerticalStackLayout>
+            </Frame>
 
-                <Entry x:Name="NovaConta"
-                        HorizontalOptions="FillAndExpand"
-                       Placeholder="Adicionar nova conta"/>
+            <!-- Minhas contas -->
+            <Label Text="Minhas contas:"
+                   FontSize="Large"
+                   FontAttributes="Bold"
+                   TextColor="#333333"/>
 
-                <Button
-                    x:Name="AddBtn"
-                    ImageSource="add.png"
-                    HeightRequest="40"
-                    Clicked="AddClicked"
-                    HorizontalOptions="Fill" />
-            </StackLayout>
-            <Label
-                Text="Minhas contas:"
-                Style="{StaticResource SubHeadline}"
-                SemanticProperties.HeadingLevel="Level2"
-             />
-
-            <ListView x:Name="ListaContas"
-                      ItemsSource="{Binding Contas}"
-                      ItemTapped="OnContaTapped"
-                      HorizontalOptions="FillAndExpand">
-                <ListView.ItemTemplate>
+            <CollectionView x:Name="ListaContas"
+                            ItemsSource="{Binding Contas}"
+                            SelectionMode="None">
+                <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="10">
-                                <Label Text="{Binding Name}" VerticalOptions="Center"/>
-                                <CheckBox IsChecked="{Binding IsPaid, Mode=TwoWay}" 
-                                          HorizontalOptions="EndAndExpand"
-                                          VerticalOptions="Center"
-                                          CheckedChanged="OnCheckedChanged">
+                        <Frame CornerRadius="15" Padding="10" Margin="0,5" BackgroundColor="White" HasShadow="True">
+                            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+
+                                <Label Text="{Binding Name}"
+                                       TextColor="#333333"
+                                       VerticalOptions="Center"
+                                       FontSize="Medium"
+                                       HorizontalOptions="StartAndExpand"/>
+
+                                <CheckBox IsChecked="{Binding IsPaid, Mode=TwoWay}"
+                                          CheckedChanged="OnCheckedChanged"
+                                          HorizontalOptions="End">
                                     <CheckBox.Triggers>
                                         <DataTrigger TargetType="CheckBox" Binding="{Binding IsPaid}" Value="True">
                                             <Setter Property="Color" Value="Green"/>
@@ -88,54 +77,51 @@
                                         </DataTrigger>
                                     </CheckBox.Triggers>
                                 </CheckBox>
+
                                 <Button x:Name="DeleteButton"
                                         ImageSource="delete.png"
-                                        HeightRequest="40"
+                                        BackgroundColor="Transparent"
+                                        HeightRequest="30"
+                                        WidthRequest="30"
                                         Clicked="DeleteButton_Clicked"
-                                        CommandParameter="{Binding .}" />           
-                            </StackLayout>
-                        </ViewCell>
+                                        CommandParameter="{Binding .}"/>
+                            </HorizontalStackLayout>
+                        </Frame>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
-            <StackLayout Orientation="Horizontal" 
-                         VerticalOptions="Center"
-                         Margin="3">
-                <Label
-                        HorizontalOptions="Start"
-                        VerticalOptions="Center"
-                        Text="Salvar Histórico do Mês"
-                        FontSize="Medium"/>
+            <!-- Histórico -->
+            <Frame CornerRadius="15" Padding="10" BackgroundColor="White" HasShadow="True">
+                <VerticalStackLayout Spacing="10">
 
-                <Button x:Name="salvarHistoricoMesReferencia"
-                        HorizontalOptions="EndAndExpand"
-                        ImageSource="update.png"
-                        HeightRequest="40"
-                        Clicked="salvarHistoricoMesReferencia_Clicked"/>
+                    <Button x:Name="salvarHistoricoMesReferencia"
+                            Text="Salvar Histórico"
+                            ImageSource="update.png"
+                            BackgroundColor="#FF9800"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="45"
+                            Clicked="salvarHistoricoMesReferencia_Clicked"/>
 
-              
-            </StackLayout>
+                    <Button x:Name="historicoMesReferencia"
+                            Text="Ver Histórico"
+                            ImageSource="history.png"
+                            BackgroundColor="#673AB7"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="45"
+                            Clicked="historicoMesReferencia_Clicked"/>
 
-            <StackLayout Orientation="Horizontal" 
-                VerticalOptions="Center"
-                Margin="3">
-                <Label
-                       HorizontalOptions="Start"
-                       VerticalOptions="Center"
-                       Text="Histórico de Pagamentos"
-                       FontSize="Medium"/>
-                <Button x:Name="historicoMesReferencia"
-                        HorizontalOptions="EndAndExpand"
-                        ImageSource="history.png"
-                        HeightRequest="40"
-                        Clicked="historicoMesReferencia_Clicked"/>
-            </StackLayout>
-            <Label
-                   Text="v.1.2"
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Versão do app -->
+            <Label Text="v1.2"
                    VerticalOptions="EndAndExpand"
                    HorizontalOptions="Center"
-            />
+                   FontSize="Small"
+                   TextColor="#999999"/>
         </VerticalStackLayout>
     </ScrollView>
 

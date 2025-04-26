@@ -81,6 +81,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="Converters\**" />
+	  <Compile Remove="Converters\**" />
+	  <EmbeddedResource Remove="Converters\**" />
+	  <MauiCss Remove="Converters\**" />
+	  <MauiXaml Remove="Converters\**" />
+	  <None Remove="Converters\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Remove="Resources\AppIcon\icon.svg" />
 		<None Remove="Resources\Images\add.png" />
 		<None Remove="Resources\Images\delete.png" />

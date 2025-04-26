@@ -12,7 +12,8 @@ namespace Pagamentos
         {
             _database = new SQLiteAsyncConnection(dbPath);
             _database.CreateTableAsync<Conta>().Wait();
-            _database.CreateTableAsync<HistoricoConta>().Wait(); // <--- Aqui também!
+            _database.CreateTableAsync<HistoricoConta>().Wait();
+            _database.CreateTableAsync<MesReferencia>().Wait();
         }
 
         // Métodos para Conta
@@ -70,5 +71,34 @@ namespace Pagamentos
         {
             return _database.DeleteAllAsync<HistoricoConta>();
         }
+
+        // Métodos para MesReferencia
+        public Task<List<MesReferencia>> GetMesesReferenciaAsync()
+        {
+            return _database.Table<MesReferencia>().ToListAsync();
+        }
+
+        public async Task<MesReferencia> GetUltimoMesReferenciaAsync()
+        {
+            return await _database.Table<MesReferencia>().OrderByDescending(m => m.Id).FirstOrDefaultAsync();
+        }
+
+        public Task<int> SaveMesReferenciaAsync(MesReferencia mesReferencia)
+        {
+            if (mesReferencia.Id != 0)
+            {
+                return _database.UpdateAsync(mesReferencia);
+            }
+            else
+            {
+                return _database.InsertAsync(mesReferencia);
+            }
+        }
+
+        public Task<int> DeleteMesReferenciaAsync(MesReferencia mesReferencia)
+        {
+            return _database.DeleteAsync(mesReferencia);
+        }
+
     }
 }

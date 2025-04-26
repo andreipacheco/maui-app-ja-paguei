@@ -27,6 +27,13 @@ namespace Pagamentos
 
             // Configura o ItemsSource do ListView
             ListaContas.ItemsSource = contas;
+
+            picker.ItemsSource = new List<string>
+            {
+                "Janeiro", "Fevereiro", "Março", "Abril",
+                "Maio", "Junho", "Julho", "Agosto",
+                "Setembro", "Outubro", "Novembro", "Dezembro"
+            };
         }
 
         private void AddClicked(object sender, EventArgs e)
@@ -53,7 +60,7 @@ namespace Pagamentos
                     var historico = new HistoricoConta
                     {
                         Name = conta.Name,
-                        Date = conta.Date
+                        Date = DateTime.Parse(conta.Date)  // Converte a string para DateTime
                     };
                     await _databaseService.SaveHistoricoAsync(historico);
                 }
@@ -97,21 +104,6 @@ namespace Pagamentos
             }
         }
 
-        private void LoadContas()
-        {
-            var contasJson = Preferences.Get("contas", string.Empty);
-            if (!string.IsNullOrEmpty(contasJson))
-            {
-                var contasList = JsonSerializer.Deserialize<List<Conta>>(contasJson);
-
-                // Recarrega as contas na ObservableCollection
-                foreach (var conta in contasList)
-                {
-                    contas.Add(conta);
-                }
-            }
-        }
-
         private async void DeleteButton_Clicked(object sender, EventArgs e)
         {
             var button = sender as Button;
@@ -131,27 +123,24 @@ namespace Pagamentos
             }
         }
 
-        private void LoadMesReferencia()
+        private async Task LoadMesReferencia()
         {
-            // Recupera o mês de referência salvo no Preferences
-            var mesSalvo = Preferences.Get("mesReferencia", string.Empty);
-
-            if (!string.IsNullOrEmpty(mesSalvo))
+            var mesReferencia = await _databaseService.GetUltimoMesReferenciaAsync();
+            if (mesReferencia != null)
             {
-                // Define o mês salvo como o item selecionado no Picker
-                picker.SelectedItem = mesSalvo;
+                picker.SelectedItem = mesReferencia.NomeMes;
             }
         }
 
-        private void salvarMesReferencia_Clicked(object sender, EventArgs e)
+        private async void salvarMesReferencia_Clicked(object sender, EventArgs e)
         {
             // Obtém o valor selecionado no Picker
             var mesSelecionado = picker.SelectedItem?.ToString();
 
             if (!string.IsNullOrEmpty(mesSelecionado))
             {
-                // Persiste o mês selecionado no Preferences
-                Preferences.Set("mesReferencia", mesSelecionado);
+                var novoMes = new MesReferencia { NomeMes = mesSelecionado };
+                await _databaseService.SaveMesReferenciaAsync(novoMes);
 
                 // Exibe uma mensagem de confirmação
                 DisplayAlert("Sucesso", $"Mês de referência '{mesSelecionado}' salvo com sucesso!", "OK");
@@ -184,7 +173,11 @@ namespace Pagamentos
             }
 
             // Armazena o histórico de contas pagas com as respectivas datas usando a nova classe HistoricoConta
-            var contasPagasHistorico = contas.Select(c => new HistoricoConta { Name = c.Name, Date = c.Date }).ToList();
+            var contasPagasHistorico = contas.Select(c => new HistoricoConta
+            {
+                Name = c.Name,
+                Date = DateTime.Parse(c.Date)  // Converte a string para DateTime
+            }).ToList();
 
             // Serializa o histórico para salvar no Preferences
             var historicoJson = JsonSerializer.Serialize(contasPagasHistorico);

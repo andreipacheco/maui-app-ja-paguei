@@ -6,7 +6,8 @@ namespace Pagamentos
     public partial class HistoricoPage : ContentPage
     {
         private DatabaseService _databaseService;
-        private ObservableCollection<HistoricoConta> historicoContas = new ObservableCollection<HistoricoConta>();
+        public ObservableCollection<HistoricoConta> HistoricoContas { get; set; } = new ObservableCollection<HistoricoConta>();
+
         public HistoricoPage(List<HistoricoConta> historico)
         {
             InitializeComponent();
@@ -14,17 +15,27 @@ namespace Pagamentos
             string dbPath = Path.Combine(FileSystem.AppDataDirectory, "contas.db3");
             _databaseService = new DatabaseService(dbPath);
 
+            BindingContext = this;
+
             LoadHistoricoFromDb();
         }
 
         private async void LoadHistoricoFromDb()
         {
             var historicos = await _databaseService.GetHistoricosAsync();
-            foreach (var item in historicos)
+
+            var historicosOrdenados = historicos
+                .OrderByDescending(h => h.Date)
+                .ToList();
+
+            HistoricoContas.Clear();
+
+            foreach (var item in historicosOrdenados)
             {
-                historicoContas.Add(item);
+                HistoricoContas.Add(item);
             }
         }
+
     }
 }
 
