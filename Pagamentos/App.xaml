@@ -5,6 +5,7 @@
              x:Class="Pagamentos.App">
     <Application.Resources>
         <ResourceDictionary>
+            <local:PagoImageConverter x:Key="PagoImageConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />

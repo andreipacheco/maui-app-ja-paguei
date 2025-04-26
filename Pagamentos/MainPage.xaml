@@ -52,41 +52,45 @@
                    TextColor="#333333"/>
 
             <CollectionView x:Name="ListaContas"
-                            ItemsSource="{Binding Contas}"
-                            SelectionMode="None">
+                ItemsSource="{Binding Contas}"
+                SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame CornerRadius="15" Padding="10" Margin="0,5" BackgroundColor="White" HasShadow="True">
-                            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem
+                                        Text="Pagar"
+                                        BackgroundColor="#4CAF50"
+                                        IconImageSource="pagar.png"
+                                        CommandParameter="{Binding .}"
+                                        Invoked="OnPaySwipeInvoked" />
+                                    <SwipeItem
+                                        Text="Excluir"
+                                        BackgroundColor="#F44336"
+                                        IconImageSource="delete.png"
+                                        CommandParameter="{Binding .}"
+                                        Invoked="OnDeleteSwipeInvoked" />
+                                </SwipeItems>
+                            </SwipeView.RightItems>
 
-                                <Label Text="{Binding Name}"
+                            <Frame CornerRadius="15" Padding="10" Margin="0,5" BackgroundColor="White" HasShadow="True">
+                                <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+
+                                    <Label Text="{Binding Name}"
                                        TextColor="#333333"
                                        VerticalOptions="Center"
                                        FontSize="Medium"
                                        HorizontalOptions="StartAndExpand"/>
 
-                                <CheckBox IsChecked="{Binding IsPaid, Mode=TwoWay}"
-                                          CheckedChanged="OnCheckedChanged"
-                                          HorizontalOptions="End">
-                                    <CheckBox.Triggers>
-                                        <DataTrigger TargetType="CheckBox" Binding="{Binding IsPaid}" Value="True">
-                                            <Setter Property="Color" Value="Green"/>
-                                        </DataTrigger>
-                                        <DataTrigger TargetType="CheckBox" Binding="{Binding IsPaid}" Value="False">
-                                            <Setter Property="Color" Value="Red"/>
-                                        </DataTrigger>
-                                    </CheckBox.Triggers>
-                                </CheckBox>
+                                    <Image Source="{Binding IsPaid, Converter={StaticResource PagoImageConverter}}"
+                                           HeightRequest="24"
+                                           WidthRequest="24"
+                                           VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+                            </Frame>
 
-                                <Button x:Name="DeleteButton"
-                                        ImageSource="delete.png"
-                                        BackgroundColor="Transparent"
-                                        HeightRequest="30"
-                                        WidthRequest="30"
-                                        Clicked="DeleteButton_Clicked"
-                                        CommandParameter="{Binding .}"/>
-                            </HorizontalStackLayout>
-                        </Frame>
+                        </SwipeView>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
@@ -117,7 +121,7 @@
             </Frame>
 
             <!-- Versão do app -->
-            <Label Text="v1.2"
+            <Label Text="v1.4"
                    VerticalOptions="EndAndExpand"
                    HorizontalOptions="Center"
                    FontSize="Small"

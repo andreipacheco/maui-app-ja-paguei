@@ -36,6 +36,65 @@ namespace Pagamentos
             };
         }
 
+        private async void OnPaySwipeInvoked(object sender, EventArgs e)
+        {
+            if (sender is SwipeItem swipeItem && swipeItem.CommandParameter is Conta conta)
+            {
+                conta.IsPaid = !conta.IsPaid;
+
+                // Atualiza a data de pagamento se a conta for marcada como paga
+                if (conta.IsPaid)
+                {
+                    conta.Date = DateTime.Now.ToString("dd/MM/yyyy");
+
+                    // Adiciona no histórico
+                    var historico = new HistoricoConta
+                    {
+                        Name = conta.Name,
+                        Date = DateTime.Parse(conta.Date)  // Converte a string para DateTime
+                    };
+                    await _databaseService.SaveHistoricoAsync(historico);
+                }
+                else
+                {
+                    conta.Date = string.Empty;
+                }
+
+                // Salva a conta no banco de dados (chamada assíncrona)
+                await SaveConta(conta);
+
+                // Atualiza a coleção de contas
+                // Não é necessário redefinir o ItemsSource, já que a ObservableCollection faz isso automaticamente
+                // O ListView irá automaticamente atualizar a interface para refletir a mudança no estado da conta
+
+                // Exibe a mensagem de sucesso
+                await DisplayAlert("Sucesso", $"{conta.Name} foi marcada como paga!", "OK");
+            }
+        }
+
+
+        private async void OnDeleteSwipeInvoked(object sender, EventArgs e)
+        {
+            if (sender is SwipeItem swipeItem && swipeItem.CommandParameter is Conta conta)
+            {
+                bool confirm = await DisplayAlert("Confirmar", $"Deseja remover a conta '{conta.Name}'?", "Sim", "Não");
+
+                if (confirm)
+                {
+                    // Remove da ObservableCollection
+                    contas.Remove(conta);
+
+                    // Deleta do banco de dados
+                    await _databaseService.DeleteContaAsync(conta);
+
+                    // Exibe a mensagem de sucesso
+                    await DisplayAlert("Sucesso", $"Conta '{conta.Name}' deletada com sucesso!", "OK");
+                }
+            }
+        }
+    
+        
+
         private void AddClicked(object sender, EventArgs e)
         {
             var novaConta = new Conta { Name = NovaConta.Text, IsPaid = false, Date = "" };
@@ -90,7 +149,9 @@ namespace Pagamentos
             ((ListView)sender).SelectedItem = null;
         }
 
-        private async void SaveConta(Conta conta)
+        private async 
+        Task
+SaveConta(Conta conta)
         {
             await _databaseService.SaveContaAsync(conta);
         }
@@ -176,7 +237,7 @@ namespace Pagamentos
             var contasPagasHistorico = contas.Select(c => new HistoricoConta
             {
                 Name = c.Name,
-                Date = DateTime.Parse(c.Date)  // Converte a string para DateTime
+                Date = !string.IsNullOrEmpty(c.Date) ? DateTime.Parse(c.Date) : default  // Verifica se a data não está vazia
             }).ToList();
 
             // Serializa o histórico para salvar no Preferences
@@ -188,6 +249,7 @@ namespace Pagamentos
             // Exibe uma mensagem de sucesso
             DisplayAlert("Sucesso", $"Histórico do mês de '{mesSelecionado}' salvo com sucesso!", "OK");
         }
+
 
         private void historicoMesReferencia_Clicked(object sender, EventArgs e)
         {
