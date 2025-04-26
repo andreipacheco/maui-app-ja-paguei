@@ -24,5 +24,5 @@ Remover Conta: Para deletar uma conta, clique no botão de remoção (ícone de 
 
 
 ## Imagens do Aplicativo 📱
-<img src="./Screenshot_20240913-113322.png" width="300" alt="App">  
-<img src="./Screenshot_20240913-103848.png" width="300" alt="App"> 
+<img src="./Screenshot_20250426-183231.png" width="300" alt="App">  
+<img src="./Screenshot_20250426-183226.png" width="300" alt="App"> 
