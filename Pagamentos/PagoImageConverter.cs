@@ -11,9 +11,6 @@ namespace Pagamentos
             if (value is bool isPaid)
             {
                 return isPaid ? "check.png" : "unpaid.png";
-                // "check.png" = pago
-                // "unpaid.png" = não pago
-                // (Você precisa ter essas imagens no seu projeto, posso te ajudar a criar se quiser)
             }
 
             return "unpaid.png";
