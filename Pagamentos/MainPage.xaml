@@ -37,7 +37,7 @@
                     <Button x:Name="AddBtn"
                             Text="Adicionar"
                             ImageSource="add.png"
-                            BackgroundColor="#2196F3"
+                            BackgroundColor="#198FE3"
                             TextColor="White"
                             CornerRadius="10"
                             HeightRequest="45"
@@ -121,7 +121,7 @@
             </Frame>
 
             <!-- Versão do app -->
-            <Label Text="v1.4"
+            <Label Text="v1.5"
                    VerticalOptions="EndAndExpand"
                    HorizontalOptions="Center"
                    FontSize="Small"

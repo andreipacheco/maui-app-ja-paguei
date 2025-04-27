@@ -1,5 +1,6 @@
 ﻿
 using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Behaviors;
 using CommunityToolkit.Maui.Core;
 using Pagamentos;
 using System.Collections.ObjectModel;
@@ -13,6 +14,7 @@ namespace Pagamentos
         ObservableCollection<Conta> contas = new ObservableCollection<Conta>();
         public ObservableCollection<Conta> Contas { get { return contas; } }
         private DatabaseService _databaseService;
+
         public MainPage()
         {
             InitializeComponent();
