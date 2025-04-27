@@ -27,12 +27,12 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
-		<TargetPlatformVersion>18.2</TargetPlatformVersion>
+		<TargetPlatformVersion>18.4</TargetPlatformVersion>
 		<SupportedOSPlatformVersion>11.0</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-maccatalyst'">
-		<TargetPlatformVersion>18.2</TargetPlatformVersion>
+		<TargetPlatformVersion>18.4</TargetPlatformVersion>
 		<SupportedOSPlatformVersion>13.1</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
