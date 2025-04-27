@@ -19,7 +19,7 @@
                     <Button x:Name="salvarMesReferencia"
                             Text="Salvar mês"
                             ImageSource="save.png"
-                            BackgroundColor="#4CAF50"
+                            BackgroundColor="#20C997"
                             TextColor="White"
                             CornerRadius="10"
                             HeightRequest="45"

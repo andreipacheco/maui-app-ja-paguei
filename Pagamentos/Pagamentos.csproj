@@ -63,10 +63,10 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\icon.svg" BaseSize="128,128" Color="#ac99ea" />
+		<MauiIcon Include="Resources\AppIcon\icon.svg" BaseSize="128,128" Color="#20C997"/>
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash2.svg" BaseSize="128,128" Color="#ac99ea">
+		<MauiSplashScreen Include="Resources\Splash\splash2.svg" BaseSize="128,128" Color="#20C997">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</MauiSplashScreen>
 
