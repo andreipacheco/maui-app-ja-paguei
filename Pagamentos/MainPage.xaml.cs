@@ -1,4 +1,6 @@
 ﻿
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using Pagamentos;
 using System.Collections.ObjectModel;
 using System.Text.Json;
@@ -101,7 +103,9 @@ namespace Pagamentos
             if (string.IsNullOrWhiteSpace(NovaConta.Text) || NovaConta.Text.Length < 5)
             {
                 // Exibe um aviso ao usuário
-                await DisplayAlert("Atenção", "O nome da conta deve ter no mínimo 5 caracteres e não pode ser vazio.", "OK");
+                await Toast.Make("O nome da conta deve ter no mínimo 5 caracteres e não pode ser vazio",
+                  ToastDuration.Long)
+                    .Show();
                 return;
             }
 
@@ -144,22 +148,22 @@ namespace Pagamentos
             }
         }
 
-        private void OnContaTapped(object sender, ItemTappedEventArgs e)
-        {
-            var contaSelecionada = e.Item as Conta;
-            if (contaSelecionada != null && !string.IsNullOrEmpty(contaSelecionada.Date))
-            {
-                // Mostra a data de pagamento da conta em um DisplayAlert
-                DisplayAlert("Informação de Pagamento", $"{contaSelecionada.Name} paga em: {contaSelecionada.Date}", "OK");
-            }
-            else
-            {
-                DisplayAlert("Atenção!", "Essa conta ainda não foi paga!", "OK");
-            }
+        //private void OnContaTapped(object sender, ItemTappedEventArgs e)
+        //{
+        //    var contaSelecionada = e.Item as Conta;
+        //    if (contaSelecionada != null && !string.IsNullOrEmpty(contaSelecionada.Date))
+        //    {
+        //        // Mostra a data de pagamento da conta em um DisplayAlert
+        //        DisplayAlert("Informação de Pagamento", $"{contaSelecionada.Name} paga em: {contaSelecionada.Date}", "OK");
+        //    }
+        //    else
+        //    {
+        //        DisplayAlert("Atenção!", "Essa conta ainda não foi paga!", "OK");
+        //    }
 
-            // Desmarca o item após a seleção para evitar que fique selecionado visualmente
-            ((ListView)sender).SelectedItem = null;
-        }
+        //    // Desmarca o item após a seleção para evitar que fique selecionado visualmente
+        //    ((ListView)sender).SelectedItem = null;
+        //}
 
         private async Task SaveConta(Conta conta)
         {
@@ -247,7 +251,11 @@ namespace Pagamentos
             if (contasNaoPagas.Count > 0)
             {
                 // Alerta o usuário que ainda há contas não pagas
-                await DisplayAlert("Atenção", "Ainda há contas não pagas. Por favor, quite todas as contas antes de salvar o histórico.", "OK");
+                // await DisplayAlert("Atenção", "Ainda há contas não pagas. Por favor, quite todas as contas antes de salvar o histórico.", "OK");
+
+                await Toast.Make("Ainda há contas não pagas. Quite todas as contas antes de salvar o histórico.",
+                      ToastDuration.Long)
+                        .Show();
                 return;
             }
 
@@ -255,7 +263,10 @@ namespace Pagamentos
             var mesSelecionado = picker.SelectedItem?.ToString();
             if (string.IsNullOrEmpty(mesSelecionado))
             {
-                await DisplayAlert("Atenção", "Por favor, selecione um mês de referência.", "OK");
+                // await DisplayAlert("Atenção", "Por favor, selecione um mês de referência.", "OK");
+                await Toast.Make("Por favor, selecione um mês de referência.",
+                     ToastDuration.Long)
+                       .Show();
                 return;
             }
 
