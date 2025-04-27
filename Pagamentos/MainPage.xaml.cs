@@ -92,15 +92,27 @@ namespace Pagamentos
                 }
             }
         }
-    
-        
 
-        private void AddClicked(object sender, EventArgs e)
+
+
+        private async void AddClicked(object sender, EventArgs e)
         {
+            // Verifica se o campo está vazio ou tem menos de 5 caracteres
+            if (string.IsNullOrWhiteSpace(NovaConta.Text) || NovaConta.Text.Length < 5)
+            {
+                // Exibe um aviso ao usuário
+                await DisplayAlert("Atenção", "O nome da conta deve ter no mínimo 5 caracteres e não pode ser vazio.", "OK");
+                return;
+            }
+
+            // Cria uma nova conta e adiciona à coleção
             var novaConta = new Conta { Name = NovaConta.Text, IsPaid = false, Date = "" };
             contas.Add(novaConta);
-            SaveConta(novaConta);
 
+            // Salva a conta no banco de dados
+            await SaveConta(novaConta);
+
+            // Limpa o campo de entrada
             NovaConta.Text = "";
         }
 
@@ -149,9 +161,7 @@ namespace Pagamentos
             ((ListView)sender).SelectedItem = null;
         }
 
-        private async 
-        Task
-SaveConta(Conta conta)
+        private async Task SaveConta(Conta conta)
         {
             await _databaseService.SaveContaAsync(conta);
         }
