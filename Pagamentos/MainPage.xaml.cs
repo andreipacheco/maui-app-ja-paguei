@@ -203,17 +203,33 @@ SaveConta(Conta conta)
                 var novoMes = new MesReferencia { NomeMes = mesSelecionado };
                 await _databaseService.SaveMesReferenciaAsync(novoMes);
 
+                // Atualiza todas as contas para IsPaid = false
+                var todasContas = await _databaseService.GetContasAsync();
+                foreach (var conta in todasContas)
+                {
+                    conta.IsPaid = false;
+                    conta.Date = string.Empty; // Limpa a data de pagamento
+                    await _databaseService.SaveContaAsync(conta);
+                }
+
+                // Atualiza a ObservableCollection para refletir as mudanças na interface
+                contas.Clear();
+                foreach (var conta in todasContas)
+                {
+                    contas.Add(conta);
+                }
+
                 // Exibe uma mensagem de confirmação
-                DisplayAlert("Sucesso", $"Mês de referência '{mesSelecionado}' salvo com sucesso!", "OK");
+                await DisplayAlert("Sucesso", $"Mês de referência '{mesSelecionado}' salvo com sucesso e todas as contas foram resetadas!", "OK");
             }
             else
             {
                 // Exibe um alerta se nenhum mês foi selecionado
-                DisplayAlert("Atenção", "Por favor, selecione um mês de referência.", "OK");
+                await DisplayAlert("Atenção", "Por favor, selecione um mês de referência.", "OK");
             }
         }
 
-        private void salvarHistoricoMesReferencia_Clicked(object sender, EventArgs e)
+        private async void salvarHistoricoMesReferencia_Clicked(object sender, EventArgs e)
         {
             // Verifica se todas as contas estão pagas
             var contasNaoPagas = contas.Where(c => !c.IsPaid).ToList();
@@ -221,7 +237,7 @@ SaveConta(Conta conta)
             if (contasNaoPagas.Count > 0)
             {
                 // Alerta o usuário que ainda há contas não pagas
-                DisplayAlert("Atenção", "Ainda há contas não pagas. Por favor, quite todas as contas antes de salvar o histórico.", "OK");
+                await DisplayAlert("Atenção", "Ainda há contas não pagas. Por favor, quite todas as contas antes de salvar o histórico.", "OK");
                 return;
             }
 
@@ -229,53 +245,47 @@ SaveConta(Conta conta)
             var mesSelecionado = picker.SelectedItem?.ToString();
             if (string.IsNullOrEmpty(mesSelecionado))
             {
-                DisplayAlert("Atenção", "Por favor, selecione um mês de referência.", "OK");
+                await DisplayAlert("Atenção", "Por favor, selecione um mês de referência.", "OK");
                 return;
             }
 
-            // Armazena o histórico de contas pagas com as respectivas datas usando a nova classe HistoricoConta
+            // Armazena o histórico de contas pagas com as respectivas datas
             var contasPagasHistorico = contas.Select(c => new HistoricoConta
             {
                 Name = c.Name,
-                Date = !string.IsNullOrEmpty(c.Date) ? DateTime.Parse(c.Date) : default  // Verifica se a data não está vazia
+                Date = !string.IsNullOrEmpty(c.Date) ? DateTime.Parse(c.Date) : default
             }).ToList();
 
-            // Serializa o histórico para salvar no Preferences
-            var historicoJson = JsonSerializer.Serialize(contasPagasHistorico);
-
-            // Salva o histórico com o nome do mês como chave no Preferences
-            Preferences.Set($"historico_{mesSelecionado}", historicoJson);
+            // Salva cada item do histórico no banco de dados
+            foreach (var historico in contasPagasHistorico)
+            {
+                await _databaseService.SaveHistoricoAsync(historico);
+            }
 
             // Exibe uma mensagem de sucesso
-            DisplayAlert("Sucesso", $"Histórico do mês de '{mesSelecionado}' salvo com sucesso!", "OK");
+            await DisplayAlert("Sucesso", $"Histórico do mês de '{mesSelecionado}' salvo com sucesso!", "OK");
         }
 
-
-        private void historicoMesReferencia_Clicked(object sender, EventArgs e)
+        private async void historicoMesReferencia_Clicked(object sender, EventArgs e)
         {
             // Obtém o mês selecionado no Picker
             var mesSelecionado = picker.SelectedItem?.ToString();
 
             if (string.IsNullOrEmpty(mesSelecionado))
             {
-                DisplayAlert("Atenção", "Por favor, selecione um mês de referência.", "OK");
+                await DisplayAlert("Atenção", "Por favor, selecione um mês de referência.", "OK");
                 return;
             }
 
-            // Carrega o histórico do mês selecionado do Preferences
-            var historicoJson = Preferences.Get($"historico_{mesSelecionado}", string.Empty);
+            // Carrega o histórico do banco de dados
+            var historico = await _databaseService.GetHistoricosAsync();
 
-            if (string.IsNullOrEmpty(historicoJson))
-            {
-                DisplayAlert("Atenção", $"Não há histórico salvo para o mês de '{mesSelecionado}'.", "OK");
-                return;
-            }
 
-            // Desserializa o histórico
-            var historico = JsonSerializer.Deserialize<List<HistoricoConta>>(historicoJson);
+            // Filtra o histórico pelo mês selecionado
+            var historicoFiltrado = historico.Where(h => h.Date.ToString("MMMM", new System.Globalization.CultureInfo("pt-BR")) == mesSelecionado).ToList();
 
             // Navega para a página de histórico e passa os dados
-            Navigation.PushAsync(new HistoricoPage(historico));
+            await Navigation.PushAsync(new HistoricoPage(historicoFiltrado));
         }
     }
 }
