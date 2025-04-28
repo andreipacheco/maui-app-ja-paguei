@@ -51,6 +51,17 @@
                    FontAttributes="Bold"
                    TextColor="#333333"/>
 
+            <!-- <Button x:Name="SyncContasButton"
+                    Text="Atualizar status Contas"
+                    ImageSource="sync.png"
+                    BackgroundColor="#198FE3"
+                    TextColor="White"
+                    CornerRadius="10"
+                    HeightRequest="45"
+                    Clicked="SyncContasButton_Clicked"
+                    HorizontalOptions="FillAndExpand"
+                    Margin="0,0,0,10"/> -->
+
             <CollectionView x:Name="ListaContas"
                 ItemsSource="{Binding Contas}"
                 SelectionMode="None">

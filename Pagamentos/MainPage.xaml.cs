@@ -23,12 +23,14 @@ namespace Pagamentos
             string dbPath = Path.Combine(FileSystem.AppDataDirectory, "contas.db3");
             _databaseService = new DatabaseService(dbPath);
 
+           
             // Carrega dados
             LoadContasFromDb();
 
             // Carrega o mês
             LoadMesReferencia();
 
+            BindingContext = this;
             // Configura o ItemsSource do ListView
             ListaContas.ItemsSource = contas;
 
@@ -39,6 +41,35 @@ namespace Pagamentos
                 "Setembro", "Outubro", "Novembro", "Dezembro"
             };
         }
+
+        //private async void SyncContasButton_Clicked(object sender, EventArgs e)
+        //{
+        //    // Obtém as contas do banco de dados
+        //    var contasList = await _databaseService.GetContasAsync();
+
+        //    // Atualiza ou adiciona contas na ObservableCollection
+        //    foreach (var conta in contasList)
+        //    {
+        //        var contaExistente = contas.FirstOrDefault(c => c.Id == conta.Id);
+        //        if (contaExistente != null)
+        //        {
+        //            // Atualiza os dados da conta existente
+        //            contaExistente.Name = conta.Name;
+        //            contaExistente.IsPaid = conta.IsPaid;
+        //            contaExistente.Date = conta.Date;
+        //        }
+        //        else
+        //        {
+        //            // Adiciona novas contas
+        //            contas.Add(conta);
+        //        }
+        //    }
+
+        //    // Exibe uma mensagem de sucesso
+        //    await Toast.Make("Contas atualizadas com sucesso!",
+        //       ToastDuration.Long)
+        //         .Show();
+        //}
 
         private async void OnPaySwipeInvoked(object sender, EventArgs e)
         {
@@ -72,7 +103,10 @@ namespace Pagamentos
                 // O ListView irá automaticamente atualizar a interface para refletir a mudança no estado da conta
 
                 // Exibe a mensagem de sucesso
-                await DisplayAlert("Sucesso", $"{conta.Name} foi marcada como paga!", "OK");
+                // await DisplayAlert("Sucesso", $"{conta.Name} foi marcada como paga!", "OK");
+                await Toast.Make($"{conta.Name} foi marcada como paga!",
+                 ToastDuration.Long)
+                   .Show();
             }
         }
 
@@ -92,20 +126,21 @@ namespace Pagamentos
                     await _databaseService.DeleteContaAsync(conta);
 
                     // Exibe a mensagem de sucesso
-                    await DisplayAlert("Sucesso", $"Conta '{conta.Name}' deletada com sucesso!", "OK");
+                    // await DisplayAlert("Sucesso", $"Conta '{conta.Name}' deletada com sucesso!", "OK");
+                    await Toast.Make($"Conta '{conta.Name}' deletada com sucesso!",
+                  ToastDuration.Long)
+                    .Show();
                 }
             }
         }
 
-
-
         private async void AddClicked(object sender, EventArgs e)
         {
             // Verifica se o campo está vazio ou tem menos de 5 caracteres
-            if (string.IsNullOrWhiteSpace(NovaConta.Text) || NovaConta.Text.Length < 5)
+            if (string.IsNullOrWhiteSpace(NovaConta.Text) || NovaConta.Text.Length < 3)
             {
                 // Exibe um aviso ao usuário
-                await Toast.Make("O nome da conta deve ter no mínimo 5 caracteres e não pode ser vazio",
+                await Toast.Make("O nome da conta deve ter no mínimo 3 caracteres e não pode ser vazio",
                   ToastDuration.Long)
                     .Show();
                 return;
