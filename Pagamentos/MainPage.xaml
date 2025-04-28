@@ -7,20 +7,24 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
             <!-- Título -->
-            <Frame CornerRadius="15" Padding="10" BackgroundColor="White" HasShadow="True">
+            <Frame CornerRadius="15" Padding="20" BackgroundColor="White" HasShadow="True">
                 <VerticalStackLayout Spacing="10">
                     <Label Text="Já Paguei !?" 
-                    FontSize="Title" 
-                    TextColor="#20C997" 
-                    HorizontalOptions="Center"/>
+                           FontSize="Title" 
+                           FontAttributes="Bold"
+                           TextColor="#20C997" 
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
                 </VerticalStackLayout>  
             </Frame>
+            
             <!-- Mês de referência -->
             <Frame CornerRadius="15" Padding="10" BackgroundColor="White" HasShadow="True">
                 <VerticalStackLayout Spacing="10">
-                    <Label Text="Mês de referência" FontSize="Medium" TextColor="#333333"/>
+                    <Label Text="Mês de referência:" FontSize="Medium" TextColor="#333333"/>
                     <Picker x:Name="picker"
                             Title="Selecione o mês"
+                            FontSize="Medium"
                             HorizontalOptions="FillAndExpand" 
                             TextColor="#333333"/>
                     <Button x:Name="salvarMesReferencia"
