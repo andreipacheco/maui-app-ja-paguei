@@ -63,7 +63,7 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\icon.svg" BaseSize="128,128" Color="#20C997"/>
+		<MauiIcon Include="Resources\AppIcon\icon.svg" BaseSize="128,128" Color="#20C997" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash2.svg" BaseSize="128,128" Color="#20C997">
@@ -103,6 +103,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.60" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.4" />
+		<PackageReference Include="OneSignalSDK.DotNet" Version="5.2.1" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="3.0.0" />
 	</ItemGroup>
