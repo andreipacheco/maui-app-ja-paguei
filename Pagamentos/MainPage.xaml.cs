@@ -134,6 +134,24 @@ namespace Pagamentos
             }
         }
 
+        private async void OnEditSwipeInvoked(object sender, EventArgs e)
+        {
+            // TODO: Implementar a funcionalidade de edição
+            if (sender is SwipeItem swipeItem && swipeItem.CommandParameter is Conta conta)
+            {
+                // Exibe um campo de entrada para editar o nome da conta
+                string result = await DisplayPromptAsync("Editar Conta", "Digite o novo nome da conta:", initialValue: conta.Name);
+                if (!string.IsNullOrWhiteSpace(result))
+                {
+                    conta.Name = result;
+                    // Salva a conta no banco de dados
+                    await SaveConta(conta);
+                    // Atualiza a ObservableCollection
+                    // Não é necessário redefinir o ItemsSource, já que a ObservableCollection faz isso automaticamente
+                }
+            }
+        }
+
         private async void AddClicked(object sender, EventArgs e)
         {
             // Verifica se o campo está vazio ou tem menos de 5 caracteres
