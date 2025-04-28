@@ -2,12 +2,19 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Pagamentos.MainPage"
-             Title="Já Paguei !?"
-             BackgroundColor="#F7F7F7">
+             BackgroundColor="#FFFFFF">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
-
+            <!-- Título -->
+            <Frame CornerRadius="15" Padding="10" BackgroundColor="White" HasShadow="True">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Já Paguei !?" 
+                    FontSize="Title" 
+                    TextColor="#20C997" 
+                    HorizontalOptions="Center"/>
+                </VerticalStackLayout>  
+            </Frame>
             <!-- Mês de referência -->
             <Frame CornerRadius="15" Padding="10" BackgroundColor="White" HasShadow="True">
                 <VerticalStackLayout Spacing="10">
