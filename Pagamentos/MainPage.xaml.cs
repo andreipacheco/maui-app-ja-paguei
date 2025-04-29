@@ -2,8 +2,10 @@
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Behaviors;
 using CommunityToolkit.Maui.Core;
+using OneSignalSDK.DotNet;
 using Pagamentos;
 using System.Collections.ObjectModel;
+using System.Text;
 using System.Text.Json;
 
 
@@ -23,7 +25,6 @@ namespace Pagamentos
             string dbPath = Path.Combine(FileSystem.AppDataDirectory, "contas.db3");
             _databaseService = new DatabaseService(dbPath);
 
-           
             // Carrega dados
             LoadContasFromDb();
 
@@ -40,76 +41,132 @@ namespace Pagamentos
                 "Maio", "Junho", "Julho", "Agosto",
                 "Setembro", "Outubro", "Novembro", "Dezembro"
             };
+
+            // Salva a assinatura de push no SQLite
+            SavePushSubscriptionAsync();
+
+            // ScheduleMonthlyNotification();
+
+            // Adiciona um atraso de 5 segundos antes de chamar ScheduleTestNotification, para dar tempo de salvar o idPush
+            //Task.Run(async () =>
+            //{
+            //    await Task.Delay(5000); // 5 segundos
+            //    await ScheduleTestNotification();
+            //});
         }
 
-        //private async void SyncContasButton_Clicked(object sender, EventArgs e)
-        //{
-        //    // Obtém as contas do banco de dados
-        //    var contasList = await _databaseService.GetContasAsync();
 
-        //    // Atualiza ou adiciona contas na ObservableCollection
-        //    foreach (var conta in contasList)
-        //    {
-        //        var contaExistente = contas.FirstOrDefault(c => c.Id == conta.Id);
-        //        if (contaExistente != null)
-        //        {
-        //            // Atualiza os dados da conta existente
-        //            contaExistente.Name = conta.Name;
-        //            contaExistente.IsPaid = conta.IsPaid;
-        //            contaExistente.Date = conta.Date;
-        //        }
-        //        else
-        //        {
-        //            // Adiciona novas contas
-        //            contas.Add(conta);
-        //        }
-        //    }
-
-        //    // Exibe uma mensagem de sucesso
-        //    await Toast.Make("Contas atualizadas com sucesso!",
-        //       ToastDuration.Long)
-        //         .Show();
-        //}
-
-        private async void OnPaySwipeInvoked(object sender, EventArgs e)
+        private async Task SavePushSubscriptionAsync()
         {
-            if (sender is SwipeItem swipeItem && swipeItem.CommandParameter is Conta conta)
+            try
             {
-                conta.IsPaid = !conta.IsPaid;
+                // Obtém a assinatura de push do OneSignal
+                var push = OneSignal.User.PushSubscription;
 
-                // Atualiza a data de pagamento se a conta for marcada como paga
-                if (conta.IsPaid)
+                if (push != null && !string.IsNullOrEmpty(push.Id))
                 {
-                    conta.Date = DateTime.Now.ToString("dd/MM/yyyy");
-
-                    // Adiciona no histórico
-                    var historico = new HistoricoConta
-                    {
-                        Name = conta.Name,
-                        Date = DateTime.Parse(conta.Date)  // Converte a string para DateTime
-                    };
-                    await _databaseService.SaveHistoricoAsync(historico);
+                    // Salva o Player ID no SQLite
+                    await _databaseService.SavePlayerIdAsync(push.Id);
+                    Console.WriteLine($"PushSubscription salvo com sucesso: {push.Id}");
                 }
                 else
                 {
-                    conta.Date = string.Empty;
+                    Console.WriteLine("PushSubscription não encontrado ou inválido.");
                 }
-
-                // Salva a conta no banco de dados (chamada assíncrona)
-                await SaveConta(conta);
-
-                // Atualiza a coleção de contas
-                // Não é necessário redefinir o ItemsSource, já que a ObservableCollection faz isso automaticamente
-                // O ListView irá automaticamente atualizar a interface para refletir a mudança no estado da conta
-
-                // Exibe a mensagem de sucesso
-                // await DisplayAlert("Sucesso", $"{conta.Name} foi marcada como paga!", "OK");
-                await Toast.Make($"{conta.Name} foi marcada como paga!",
-                 ToastDuration.Long)
-                   .Show();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao salvar PushSubscription: {ex.Message}");
             }
         }
 
+        private async Task ScheduleMonthlyNotification()
+        {
+            try
+            {
+                var oneSignal = new OneSignalService();
+
+                // Verifica se hoje é dia 1
+                if (DateTime.Today.Day == 1)
+                {
+                    // Obtém o idPlayer do banco de dados
+                    var idPlayer = await _databaseService.GetPlayerIdAsync();
+
+                    if (!string.IsNullOrEmpty(idPlayer))
+                    {
+                        // Envia a notificação com o idPlayer
+                        await oneSignal.EnviarNotificacaoAsync(idPlayer);
+                        Console.WriteLine("Notificação enviada com sucesso para o idPlayer.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("idPlayer não encontrado no banco de dados. Notificação não enviada.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Hoje não é dia 1. Notificação não enviada.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao agendar notificação mensal: {ex.Message}");
+            }
+        }
+
+        private async Task ScheduleTestNotification()
+        {
+            var oneSignal = new OneSignalService();
+            var idPlayer = await _databaseService.GetPlayerIdAsync(); // Obtém o idPlayer do SQLite
+
+            if (!string.IsNullOrEmpty(idPlayer))
+            {
+                await oneSignal.EnviarNotificacaoAsync(idPlayer); // Passa o idPlayer como parâmetro
+            }
+            else
+            {
+                Console.WriteLine("idPlayer não encontrado no banco de dados.");
+            }
+        }
+
+        private async void OnPaySwipeInvoked(object sender, EventArgs e)
+            {
+                if (sender is SwipeItem swipeItem && swipeItem.CommandParameter is Conta conta)
+                {
+                    conta.IsPaid = !conta.IsPaid;
+
+                    // Atualiza a data de pagamento se a conta for marcada como paga
+                    if (conta.IsPaid)
+                    {
+                        conta.Date = DateTime.Now.ToString("dd/MM/yyyy");
+
+                        // Adiciona no histórico
+                        var historico = new HistoricoConta
+                        {
+                            Name = conta.Name,
+                            Date = DateTime.Parse(conta.Date)  // Converte a string para DateTime
+                        };
+                        await _databaseService.SaveHistoricoAsync(historico);
+                    }
+                    else
+                    {
+                        conta.Date = string.Empty;
+                    }
+
+                    // Salva a conta no banco de dados (chamada assíncrona)
+                    await SaveConta(conta);
+
+                    // Atualiza a coleção de contas
+                    // Não é necessário redefinir o ItemsSource, já que a ObservableCollection faz isso automaticamente
+                    // O ListView irá automaticamente atualizar a interface para refletir a mudança no estado da conta
+
+                    // Exibe a mensagem de sucesso
+                    // await DisplayAlert("Sucesso", $"{conta.Name} foi marcada como paga!", "OK");
+                    await Toast.Make($"{conta.Name} foi marcada como paga!",
+                     ToastDuration.Long)
+                       .Show();
+                }
+        }
 
         private async void OnDeleteSwipeInvoked(object sender, EventArgs e)
         {

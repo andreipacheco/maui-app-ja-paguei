@@ -149,7 +149,7 @@
             </Frame>
 
             <!-- Versão do app -->
-            <Label Text="v1.5"
+            <Label Text="v1.6"
                    VerticalOptions="EndAndExpand"
                    HorizontalOptions="Center"
                    FontSize="Small"

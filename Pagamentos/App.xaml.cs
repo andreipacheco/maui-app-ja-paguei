@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui.Behaviors;
+﻿
+using CommunityToolkit.Maui.Behaviors;
 using CommunityToolkit.Maui.Core;
 using OneSignalSDK.DotNet;
 using OneSignalSDK.DotNet;
@@ -27,6 +28,17 @@ namespace Pagamentos
             // We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step 5)
             OneSignal.Notifications.RequestPermissionAsync(true);
 
+            // Verifica se está inscrito
+            if (!OneSignal.User.PushSubscription.OptedIn)
+            {
+                OneSignal.User.PushSubscription.OptIn();
+            }
+            string pushId = OneSignal.User.PushSubscription.Id;
+
+            Console.WriteLine($" >>>>>>>>>>>> OneSignal Push ID: {pushId}");
+            Console.WriteLine($" >>>>>>>>>>>> OneSignal Inscrição: {OneSignal.User.PushSubscription.OptedIn}");
+
+            //var push = OneSignal.User.PushSubscription;
             MainPage = new NavigationPage(new MainPage());
         }
     }
