@@ -21,8 +21,18 @@ namespace Pagamentos
         // Métodos para Conta
         public Task<List<Conta>> GetContasAsync() => _database.Table<Conta>().ToListAsync();
 
-        public Task<int> SaveContaAsync(Conta conta) =>
-            conta.Id != 0 ? _database.UpdateAsync(conta) : _database.InsertAsync(conta);
+        public async Task<int> SaveContaAsync(Conta conta)
+        {
+            if (conta.Id != 0)
+            {
+                return await _database.UpdateAsync(conta);
+            }
+            else
+            {
+                return await _database.InsertAsync(conta);
+            }
+        }
+
 
         public Task<int> DeleteContaAsync(Conta conta) => _database.DeleteAsync(conta);
         public Task DeleteAllContasAsync() => _database.DeleteAllAsync<Conta>();

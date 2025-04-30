@@ -6,6 +6,8 @@ public class Conta : INotifyPropertyChanged
     private string name;
     private bool isPaid;
     private string date;
+    private string valor;
+    private string dataVencimento;
 
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
@@ -45,6 +47,32 @@ public class Conta : INotifyPropertyChanged
             {
                 date = value;
                 OnPropertyChanged(nameof(Date));
+            }
+        }
+    }
+
+    public string Valor
+    {
+        get => valor;
+        set
+        {
+            if (valor != value)
+            {
+                valor = value;
+                OnPropertyChanged(nameof(Valor));
+            }
+        }
+    }
+
+    public string DataVencimento
+    {
+        get => dataVencimento;
+        set
+        {
+            if (dataVencimento != value)
+            {
+                dataVencimento = value;
+                OnPropertyChanged(nameof(DataVencimento));
             }
         }
     }

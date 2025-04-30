@@ -3,37 +3,78 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Pagamentos.ContaDetailsPage"
              Title="Detalhes da Conta"
+             xmlns:local="clr-namespace:Pagamentos"
              BackgroundColor="#FFFFFF">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:CurrencyConverter x:Key="CurrencyConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <VerticalStackLayout Padding="20" Spacing="20">
         <Label Text="Detalhes da Conta"
-               TextColor="#20C997"
+               TextColor="#20C997" 
                FontSize="Large"
                FontAttributes="Bold"
                HorizontalOptions="Center" />
 
+        <!-- Nome da Conta -->
         <Label Text="Nome da Conta:"
-               TextColor="#20C997"
+               TextColor="#20C997" 
                FontSize="Medium"
                FontAttributes="Bold" />
         <Label x:Name="ContaNameLabel"
                FontSize="Medium"
                TextColor="#333333" />
 
+        <!-- Status de Pagamento -->
         <Label Text="Status de Pagamento:"
-               TextColor="#20C997"
+               TextColor="#20C997" 
                FontSize="Medium"
                FontAttributes="Bold" />
         <Label x:Name="ContaStatusLabel"
                FontSize="Medium"
                TextColor="#333333" />
 
+        <!-- Data de Pagamento -->
         <Label Text="Data de Pagamento:"
-               TextColor="#20C997"
+               TextColor="#20C997" 
                FontSize="Medium"
                FontAttributes="Bold" />
         <Label x:Name="ContaDateLabel"
                FontSize="Medium"
                TextColor="#333333" />
+
+        <!-- Valor -->
+        <Label Text="Valor (Opcional):"
+               TextColor="#20C997" 
+               FontSize="Medium"
+               FontAttributes="Bold" />
+        <Entry x:Name="ValorEntry"
+               Placeholder="Digite o valor"
+               FontSize="Medium"
+               Keyboard="Numeric"
+               Text="{Binding Valor, Converter={StaticResource CurrencyConverter}}"
+               TextColor="#333333" />
+
+        <!-- Data de Vencimento -->
+        <Label Text="Data de Vencimento (Opcional):"
+               TextColor="#20C997" 
+               FontSize="Medium"
+               FontAttributes="Bold" />
+        <DatePicker x:Name="DataVencimentoPicker"
+                    FontSize="Medium"
+                    Format="dd/MM/yyyy"
+                    TextColor="#333333" />
+
+        <!-- Botão para Salvar -->
+        <Button Text="Salvar"
+                BackgroundColor="#20C997"
+                ImageSource="save.png"
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="45"
+                Clicked="OnSaveButtonClicked" />
     </VerticalStackLayout>
 </ContentPage>

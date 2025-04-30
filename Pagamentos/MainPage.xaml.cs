@@ -267,6 +267,10 @@ namespace Pagamentos
         }
         private async Task SaveConta(Conta conta)
         {
+            await Toast.Make("Conta atualizada com sucesso.",
+                    ToastDuration.Long)
+                      .Show();
+
             await _databaseService.SaveContaAsync(conta);
         }
 
