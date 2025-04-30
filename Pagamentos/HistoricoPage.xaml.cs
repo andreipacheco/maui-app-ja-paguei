@@ -1,3 +1,4 @@
+using Pagamentos.Utils;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 

@@ -3,7 +3,7 @@ using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Behaviors;
 using CommunityToolkit.Maui.Core;
 using OneSignalSDK.DotNet;
-using Pagamentos;
+using Pagamentos.Utils;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Text.Json;

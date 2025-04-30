@@ -1,4 +1,4 @@
-using Pagamentos;
+using Pagamentos.Utils;
 
 namespace Pagamentos
 {

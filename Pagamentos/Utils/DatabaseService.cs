@@ -3,7 +3,7 @@ using SQLite;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Pagamentos
+namespace Pagamentos.Utils
 {
     public class DatabaseService
     {
