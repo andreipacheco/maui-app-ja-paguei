@@ -54,7 +54,14 @@ namespace Pagamentos
             //    await ScheduleTestNotification();
             //});
         }
-
+        private async void OnDetailsButtonClicked(object sender, EventArgs e)
+        {
+            if (sender is Button button && button.CommandParameter is Conta selectedConta)
+            {
+                // Navega para a página de detalhes da conta
+                await Navigation.PushAsync(new ContaDetailsPage(selectedConta.Id));
+            }
+        }
 
         private async Task SavePushSubscriptionAsync()
         {

@@ -109,6 +109,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<MauiXaml Update="ContaDetailsPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="HistoricoPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

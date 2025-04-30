@@ -82,42 +82,60 @@
                             <SwipeView.RightItems>
                                 <SwipeItems>
                                     <SwipeItem
-                                        Text="Pagar"
-                                        BackgroundColor="#4CAF50"
-                                        IconImageSource="pagar.png"
-                                        CommandParameter="{Binding .}"
-                                        Invoked="OnPaySwipeInvoked" />
+                            Text="Pagar"
+                            BackgroundColor="#4CAF50"
+                            IconImageSource="pagar.png"
+                            CommandParameter="{Binding .}"
+                            Invoked="OnPaySwipeInvoked" />
                                     <SwipeItem
-                                        Text="Excluir"
-                                        BackgroundColor="#F44336"
-                                        IconImageSource="delete.png"
-                                        CommandParameter="{Binding .}"
-                                        Invoked="OnDeleteSwipeInvoked" />
+                            Text="Excluir"
+                            BackgroundColor="#F44336"
+                            IconImageSource="delete.png"
+                            CommandParameter="{Binding .}"
+                            Invoked="OnDeleteSwipeInvoked" />
                                     <SwipeItem
-                                         Text="Editar"
-                                         BackgroundColor="#198FE3"
-                                         IconImageSource="editar1.png"
-                                         CommandParameter="{Binding .}"
-                                         Invoked="OnEditSwipeInvoked" />
+                             Text="Renomear"
+                             BackgroundColor="#198FE3"
+                             IconImageSource="editar1.png"
+                             CommandParameter="{Binding .}"
+                             Invoked="OnEditSwipeInvoked" />
                                 </SwipeItems>
                             </SwipeView.RightItems>
 
-                            <Frame CornerRadius="15" Padding="10" Margin="0,5" BackgroundColor="White" HasShadow="True">
-                                <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                            <Frame CornerRadius="15" 
+                                   Padding="10" 
+                                   Margin="0,5" 
+                                   BackgroundColor="White" 
+                                   HasShadow="True">
+                                <Grid ColumnDefinitions="*,*,*" VerticalOptions="Center">
+                                    <!-- Nome da Conta -->
+                                    <Label Grid.Column="0"
+                                           Text="{Binding Name}"
+                                           TextColor="#333333"
+                                           VerticalOptions="Center"
+                                           FontSize="Medium"
+                                           HorizontalOptions="Start" />
 
-                                    <Label Text="{Binding Name}"
-                                       TextColor="#333333"
-                                       VerticalOptions="Center"
-                                       FontSize="Medium"
-                                       HorizontalOptions="StartAndExpand"/>
-
-                                    <Image Source="{Binding IsPaid, Converter={StaticResource PagoImageConverter}}"
+                                    <!-- Status de Pagamento -->
+                                    <Image Grid.Column="1"
+                                           Source="{Binding IsPaid, Converter={StaticResource PagoImageConverter}}"
                                            HeightRequest="24"
                                            WidthRequest="24"
-                                           VerticalOptions="Center"/>
-                                </HorizontalStackLayout>
-                            </Frame>
+                                           VerticalOptions="Center" 
+                                           HorizontalOptions="StartAndExpand"/>
 
+                                    <!-- Botão de Detalhes -->
+                                    <Button Grid.Column="2"
+                                            ImageSource="info.png"
+                                            BackgroundColor="#20C997"
+                                            TextColor="#ffffff"
+                                            CornerRadius="10"
+                                            CommandParameter="{Binding .}"
+                                            Clicked="OnDetailsButtonClicked"
+                                            HorizontalOptions="EndAndExpand"
+                                            VerticalOptions="Center" />
+                                </Grid>
+                            </Frame>
                         </SwipeView>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

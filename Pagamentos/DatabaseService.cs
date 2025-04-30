@@ -26,6 +26,10 @@ namespace Pagamentos
 
         public Task<int> DeleteContaAsync(Conta conta) => _database.DeleteAsync(conta);
         public Task DeleteAllContasAsync() => _database.DeleteAllAsync<Conta>();
+        public async Task<Conta?> GetContaByIdAsync(int id)
+        {
+            return await _database.Table<Conta>().FirstOrDefaultAsync(c => c.Id == id);
+        }
 
         // Métodos para HistoricoConta
         public Task<List<HistoricoConta>> GetHistoricosAsync() => _database.Table<HistoricoConta>().ToListAsync();
