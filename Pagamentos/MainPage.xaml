@@ -15,9 +15,9 @@
                            TextColor="#20C997" 
                            HorizontalOptions="Center"
                            VerticalOptions="Center"/>
-                </VerticalStackLayout>  
+                </VerticalStackLayout>
             </Frame>
-            
+
             <!-- Mês de referência -->
             <Frame CornerRadius="15" Padding="10" BackgroundColor="White" HasShadow="True">
                 <VerticalStackLayout Spacing="10">
@@ -62,17 +62,6 @@
                    FontAttributes="Bold"
                    TextColor="#333333"/>
 
-            <!-- <Button x:Name="SyncContasButton"
-                    Text="Atualizar status Contas"
-                    ImageSource="sync.png"
-                    BackgroundColor="#198FE3"
-                    TextColor="White"
-                    CornerRadius="10"
-                    HeightRequest="45"
-                    Clicked="SyncContasButton_Clicked"
-                    HorizontalOptions="FillAndExpand"
-                    Margin="0,0,0,10"/> -->
-
             <CollectionView x:Name="ListaContas"
                 ItemsSource="{Binding Contas}"
                 SelectionMode="None">
@@ -82,23 +71,23 @@
                             <SwipeView.RightItems>
                                 <SwipeItems>
                                     <SwipeItem
-                            Text="Pagar"
-                            BackgroundColor="#4CAF50"
-                            IconImageSource="pagar.png"
-                            CommandParameter="{Binding .}"
-                            Invoked="OnPaySwipeInvoked" />
+                                        Text="Pagar"
+                                        BackgroundColor="#4CAF50"
+                                        IconImageSource="pagar.png"
+                                        CommandParameter="{Binding .}"
+                                        Invoked="OnPaySwipeInvoked" />
                                     <SwipeItem
-                            Text="Excluir"
-                            BackgroundColor="#F44336"
-                            IconImageSource="delete.png"
-                            CommandParameter="{Binding .}"
-                            Invoked="OnDeleteSwipeInvoked" />
+                                        Text="Excluir"
+                                        BackgroundColor="#F44336"
+                                        IconImageSource="delete.png"
+                                        CommandParameter="{Binding .}"
+                                        Invoked="OnDeleteSwipeInvoked" />
                                     <SwipeItem
-                             Text="Renomear"
-                             BackgroundColor="#198FE3"
-                             IconImageSource="editar1.png"
-                             CommandParameter="{Binding .}"
-                             Invoked="OnEditSwipeInvoked" />
+                                         Text="Renomear"
+                                         BackgroundColor="#198FE3"
+                                         IconImageSource="editar1.png"
+                                         CommandParameter="{Binding .}"
+                                         Invoked="OnEditSwipeInvoked" />
                                 </SwipeItems>
                             </SwipeView.RightItems>
 
@@ -144,7 +133,6 @@
             <!-- Histórico -->
             <Frame CornerRadius="15" Padding="10" BackgroundColor="White" HasShadow="True">
                 <VerticalStackLayout Spacing="10">
-
                     <Button x:Name="salvarHistoricoMesReferencia"
                             Text="Salvar Histórico"
                             ImageSource="update.png"
@@ -162,7 +150,6 @@
                             CornerRadius="10"
                             HeightRequest="45"
                             Clicked="historicoMesReferencia_Clicked"/>
-
                 </VerticalStackLayout>
             </Frame>
 
@@ -174,5 +161,4 @@
                    TextColor="#999999"/>
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>

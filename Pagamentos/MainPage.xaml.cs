@@ -120,7 +120,6 @@ namespace Pagamentos
                 Console.WriteLine($"Erro ao agendar notificação mensal: {ex.Message}");
             }
         }
-
         private async Task ScheduleTestNotification()
         {
             var oneSignal = new OneSignalService();
@@ -266,24 +265,6 @@ namespace Pagamentos
                 SaveConta(conta);
             }
         }
-
-        //private void OnContaTapped(object sender, ItemTappedEventArgs e)
-        //{
-        //    var contaSelecionada = e.Item as Conta;
-        //    if (contaSelecionada != null && !string.IsNullOrEmpty(contaSelecionada.Date))
-        //    {
-        //        // Mostra a data de pagamento da conta em um DisplayAlert
-        //        DisplayAlert("Informação de Pagamento", $"{contaSelecionada.Name} paga em: {contaSelecionada.Date}", "OK");
-        //    }
-        //    else
-        //    {
-        //        DisplayAlert("Atenção!", "Essa conta ainda não foi paga!", "OK");
-        //    }
-
-        //    // Desmarca o item após a seleção para evitar que fique selecionado visualmente
-        //    ((ListView)sender).SelectedItem = null;
-        //}
-
         private async Task SaveConta(Conta conta)
         {
             await _databaseService.SaveContaAsync(conta);
