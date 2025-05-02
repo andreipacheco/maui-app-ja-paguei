@@ -9,6 +9,7 @@ Já Paguei é um aplicativo multi-plataforma desenvolvido com .NET MAUI para And
 - ✅ **Marcar como Pago**: Marque suas contas como pagas e visualize a data do pagamento.
 - ❌ **Remover Conta**: Remova contas facilmente com um simples toque.
 - 💾 **Persistência de Dados**: As contas são salvas localmente usando Sqlite, garantindo que os dados estejam sempre disponíveis ao reabrir o app.
+- 📣 **Notificações** : Envio de push notifications.
 
 ## Tecnologias Utilizadas 🛠
 
@@ -16,17 +17,22 @@ Já Paguei é um aplicativo multi-plataforma desenvolvido com .NET MAUI para And
 - **C#**: Linguagem de programação principal.
 - **XAML**: Para a criação de interfaces de usuário.
 - **Sqlite**: Para persistência dos dados.
+- **OneSignal**: Para envio e agendamento de Push Notifications.
 
 ## Como Funciona 🔧
 
 1. **Selecionar Mês de Referência**: No topo do aplicativo, escolha o mês para o qual deseja cadastrar as contas.
 2. **Adicionar Conta**: Preencha o campo "Adicionar nova conta" e clique no botão "Adicionar". A conta será listada abaixo.
-3. **Marcar como Pago**: Quando uma conta for paga, marque-a clicando no checkbox. A data de pagamento será automaticamente registrada.
-4. **Remover Conta**: Para deletar uma conta, clique no botão de remoção (ícone de lixeira) ao lado da conta.
+3. **Editar Conta**: Adicione mais dados a sua conta, como Valor, data de vencimento e aviso de vencimento.
+4. **Marcar como Pago**: Quando uma conta for paga, marque-a clicando no checkbox. A data de pagamento será automaticamente registrada.
+5. **Remover Conta**: Para deletar uma conta, clique no botão de remoção (ícone de lixeira) ao lado da conta.
+5. **Renomear Conta**: Para renomear uma conta, clique no botão de renomear ao lado da conta.
+6. **Histórico das contas pagas**: Histórico das contas pagas.
 
 ## Imagens do Aplicativo 📱
 
 <p align="center">
-  <img src="./Screenshot_20250426-183231.png" width="300" alt="App">
-  <img src="./Screenshot_20250426-183226.png" width="300" alt="App">
+  <img src="./Screenshot_1746204328.png" width="300" alt="App">
+  <img src="./Screenshot_1746204346.png" width="300" alt="App">
+  <img src="./Screenshot_1746204353.png" width="300" alt="App">
 </p>
