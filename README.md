@@ -26,13 +26,15 @@ Já Paguei é um aplicativo multi-plataforma desenvolvido com .NET MAUI para And
 3. **Editar Conta**: Adicione mais dados a sua conta, como Valor, data de vencimento e aviso de vencimento.
 4. **Marcar como Pago**: Quando uma conta for paga, marque-a clicando no checkbox. A data de pagamento será automaticamente registrada.
 5. **Remover Conta**: Para deletar uma conta, clique no botão de remoção (ícone de lixeira) ao lado da conta.
-5. **Renomear Conta**: Para renomear uma conta, clique no botão de renomear ao lado da conta.
-6. **Histórico das contas pagas**: Histórico das contas pagas.
+6. **Renomear Conta**: Para renomear uma conta, clique no botão de renomear ao lado da conta.
+7. **Salvar Histórico de pagamentos**: Pague todas as contas do mês atual, e salve o histórico.
+8. **Histórico das contas pagas**: Liste o histórico das contas pagas.
 
 ## Imagens do Aplicativo 📱
 
 <p align="center">
-  <img src="./Screenshot_1746204328.png" width="300" alt="App">
-  <img src="./Screenshot_1746204346.png" width="300" alt="App">
-  <img src="./Screenshot_1746204353.png" width="300" alt="App">
+  <img src="./Screenshot_1746204328.png" width="200" alt="App">
+  <img src="./Screenshot_1746204346.png" width="200" alt="App">
+  <img src="./Screenshot_1746204353.png" width="200" alt="App">
+  <img src="./Screenshot_1746204876.png" width="200" alt="App">
 </p>
