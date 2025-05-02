@@ -15,22 +15,32 @@
             <Grid Padding="0,0,0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
                 <Label Text="Nome da Conta"
                        FontAttributes="Bold"
-                       FontSize="16"
+                       FontSize="Small"
                        TextColor="Black"
                        VerticalOptions="Center" />
 
                 <Label Text="Data de Pagamento"
                        FontAttributes="Bold"
-                       FontSize="16"
+                       FontSize="Small"
+                       TextColor="Black"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       Grid.Column="1" />
+                
+                <Label Text="Valor"
+                       FontAttributes="Bold"
+                       FontSize="Small"
                        TextColor="Black"
                        VerticalOptions="Center"
                        HorizontalOptions="End"
-                       Grid.Column="1" />
+                       Grid.Column="2" />
+                
             </Grid>
         </CollectionView.Header>
 
@@ -46,22 +56,29 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
                         <Label Text="{Binding Name}"
-                               FontSize="18"
+                               FontSize="Small"
                                TextColor="Black"
                                VerticalOptions="Center" />
 
                         <Label Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}"
-                               FontSize="14"
+                               FontSize="Small"
                                TextColor="Gray"
                                Grid.Column="1"
                                VerticalOptions="Center"
+                               HorizontalOptions="Start" />
+
+                        <Label Text="{Binding Valor, StringFormat='R$ {0:N2}'}"
+                               FontSize="Small"
+                               TextColor="Black"
+                               Grid.Column="2"
+                               VerticalOptions="Center"
                                HorizontalOptions="End" />
                     </Grid>
-
                 </Frame>
             </DataTemplate>
         </CollectionView.ItemTemplate>

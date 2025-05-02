@@ -9,5 +9,7 @@ public class HistoricoConta
     public string Name { get; set; }
     [JsonConverter(typeof(JsonDateConverter))]
     public DateTime Date { get; set; }
+
+    public string Valor { get; set; }
 }
 

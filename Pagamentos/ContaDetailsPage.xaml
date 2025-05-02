@@ -3,14 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Pagamentos.ContaDetailsPage"
              Title="Detalhes da Conta"
-             xmlns:local="clr-namespace:Pagamentos.Utils"
              BackgroundColor="#FFFFFF">
-
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <local:CurrencyConverter x:Key="CurrencyConverter" />
-        </ResourceDictionary>
-    </ContentPage.Resources>
 
     <VerticalStackLayout Padding="20" Spacing="20">
         <Label Text="Detalhes da Conta"
@@ -55,7 +48,7 @@
                Placeholder="Digite o valor"
                FontSize="Medium"
                Keyboard="Numeric"
-               Text="{Binding Valor, Converter={StaticResource CurrencyConverter}}"
+               Text="{Binding Valor}"
                TextColor="#333333" />
 
         <!-- Data de Vencimento -->

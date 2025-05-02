@@ -25,9 +25,7 @@ namespace Pagamentos
             string dbPath = Path.Combine(FileSystem.AppDataDirectory, "contas.db3");
             _databaseService = new DatabaseService(dbPath);
 
-            // Carrega dados
-            LoadContasFromDb();
-
+          
             // Carrega o mês
             LoadMesReferencia();
 
@@ -53,6 +51,9 @@ namespace Pagamentos
             //    await Task.Delay(5000); // 5 segundos
             //    await ScheduleTestNotification();
             //});
+
+            // Carrega dados
+            LoadContasFromDb();
         }
         private async void OnDetailsButtonClicked(object sender, EventArgs e)
         {
@@ -135,44 +136,47 @@ namespace Pagamentos
             }
         }
 
+        private readonly object _lock = new object();
+
         private async void OnPaySwipeInvoked(object sender, EventArgs e)
+        {
+            if (sender is SwipeItem swipeItem && swipeItem.CommandParameter is Conta conta)
             {
-                if (sender is SwipeItem swipeItem && swipeItem.CommandParameter is Conta conta)
+                // Recarrega a instância da conta do banco de dados
+                var contaAtualizada = await _databaseService.GetContaByIdAsync(conta.Id);
+                if (contaAtualizada == null)
                 {
-                    conta.IsPaid = !conta.IsPaid;
+                    return;
+                }
+
+                lock (_lock)
+                {
+                    // Alterna o estado de pagamento da conta
+                    contaAtualizada.IsPaid = !contaAtualizada.IsPaid;
 
                     // Atualiza a data de pagamento se a conta for marcada como paga
-                    if (conta.IsPaid)
+                    if (contaAtualizada.IsPaid)
                     {
-                        conta.Date = DateTime.Now.ToString("dd/MM/yyyy");
-
-                        // Adiciona no histórico
-                        var historico = new HistoricoConta
-                        {
-                            Name = conta.Name,
-                            Date = DateTime.Parse(conta.Date)  // Converte a string para DateTime
-                        };
-                        await _databaseService.SaveHistoricoAsync(historico);
+                        contaAtualizada.Date = DateTime.Now.ToString("dd/MM/yyyy");
                     }
                     else
                     {
-                        conta.Date = string.Empty;
+                        contaAtualizada.Date = string.Empty; // Limpa a data de pagamento se a conta for desmarcada
                     }
-
-                    // Salva a conta no banco de dados (chamada assíncrona)
-                    await SaveConta(conta);
-
-                    // Atualiza a coleção de contas
-                    // Não é necessário redefinir o ItemsSource, já que a ObservableCollection faz isso automaticamente
-                    // O ListView irá automaticamente atualizar a interface para refletir a mudança no estado da conta
-
-                    // Exibe a mensagem de sucesso
-                    // await DisplayAlert("Sucesso", $"{conta.Name} foi marcada como paga!", "OK");
-                    await Toast.Make($"{conta.Name} foi marcada como paga!",
-                     ToastDuration.Long)
-                       .Show();
                 }
+
+                // Salva a conta no banco de dados
+                await SaveConta(contaAtualizada);
+
+                // Atualiza a ObservableCollection para refletir as mudanças
+                var index = contas.IndexOf(conta);
+                if (index >= 0)
+                {
+                    contas[index] = contaAtualizada;
+                }
+            }
         }
+
 
         private async void OnDeleteSwipeInvoked(object sender, EventArgs e)
         {
@@ -199,7 +203,6 @@ namespace Pagamentos
 
         private async void OnEditSwipeInvoked(object sender, EventArgs e)
         {
-            // TODO: Implementar a funcionalidade de edição
             if (sender is SwipeItem swipeItem && swipeItem.CommandParameter is Conta conta)
             {
                 // Exibe um campo de entrada para editar o nome da conta
@@ -228,43 +231,51 @@ namespace Pagamentos
             }
 
             // Cria uma nova conta e adiciona à coleção
-            var novaConta = new Conta { Name = NovaConta.Text, IsPaid = false, Date = "" };
+            var novaConta = new Conta
+            {
+                Name = NovaConta.Text,
+                IsPaid = false,
+                Date = DateTime.Now.ToString("dd/MM/yyyy"), // Adiciona a data atual
+                DataVencimento = DateTime.Now.ToString("dd/MM/yyyy"), // Adiciona a data atual
+                Valor = "0,00"
+            };
+
             contas.Add(novaConta);
 
-            // Salva a conta no banco de dados
+            // Salva a conta no banco de novaConta
             await SaveConta(novaConta);
 
             // Limpa o campo de entrada
             NovaConta.Text = "";
         }
 
-        private async void OnCheckedChanged(object sender, CheckedChangedEventArgs e)
-        {
-            var checkbox = sender as CheckBox;
-            var conta = checkbox.BindingContext as Conta;
+        //private async void OnCheckedChanged(object sender, CheckedChangedEventArgs e)
+        //{
+        //    var checkbox = sender as CheckBox;
+        //    var conta = checkbox.BindingContext as Conta;
 
-            if (conta != null)
-            {
-                if (conta.IsPaid)
-                {
-                    conta.Date = DateTime.Now.ToString("dd/MM/yyyy");
+        //    if (conta != null)
+        //    {
+        //        if (conta.IsPaid)
+        //        {
+        //            conta.Date = DateTime.Now.ToString("dd/MM/yyyy");
 
-                    // Adiciona no histórico
-                    var historico = new HistoricoConta
-                    {
-                        Name = conta.Name,
-                        Date = DateTime.Parse(conta.Date)  // Converte a string para DateTime
-                    };
-                    await _databaseService.SaveHistoricoAsync(historico);
-                }
-                else
-                {
-                    conta.Date = string.Empty;
-                }
+        //            // Adiciona no histórico
+        //            var historico = new HistoricoConta
+        //            {
+        //                Name = conta.Name,
+        //                Date = DateTime.Parse(conta.Date)  // Converte a string para DateTime
+        //            };
+        //            await _databaseService.SaveHistoricoAsync(historico);
+        //        }
+        //        else
+        //        {
+        //            conta.Date = string.Empty;
+        //        }
 
-                SaveConta(conta);
-            }
-        }
+        //        SaveConta(conta);
+        //    }
+        //}
         private async Task SaveConta(Conta conta)
         {
             await Toast.Make("Conta atualizada com sucesso.",
@@ -274,12 +285,24 @@ namespace Pagamentos
             await _databaseService.SaveContaAsync(conta);
         }
 
-        private async void LoadContasFromDb()
+        private async Task LoadContasFromDb()
         {
-            var contasList = await _databaseService.GetContasAsync();
-            foreach (var conta in contasList)
+            try
             {
-                contas.Add(conta);
+                var contasList = await _databaseService.GetContasAsync();
+                foreach (var conta in contasList)
+                {
+                    if (string.IsNullOrEmpty(conta.Valor))
+                    { 
+                        conta.Valor = "0,00";
+                    }
+
+                    contas.Add(conta);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERRO] Falha ao carregar contas do banco de dados: {ex.Message}");
             }
         }
 
@@ -327,6 +350,7 @@ namespace Pagamentos
                 {
                     conta.IsPaid = false;
                     conta.Date = string.Empty; // Limpa a data de pagamento
+                    conta.Valor = string.Empty; // Limpa o valor de pagamento
                     await _databaseService.SaveContaAsync(conta);
                 }
 
@@ -354,9 +378,6 @@ namespace Pagamentos
 
             if (contasNaoPagas.Count > 0)
             {
-                // Alerta o usuário que ainda há contas não pagas
-                // await DisplayAlert("Atenção", "Ainda há contas não pagas. Por favor, quite todas as contas antes de salvar o histórico.", "OK");
-
                 await Toast.Make("Ainda há contas não pagas. Quite todas as contas antes de salvar o histórico.",
                       ToastDuration.Long)
                         .Show();
@@ -367,24 +388,28 @@ namespace Pagamentos
             var mesSelecionado = picker.SelectedItem?.ToString();
             if (string.IsNullOrEmpty(mesSelecionado))
             {
-                // await DisplayAlert("Atenção", "Por favor, selecione um mês de referência.", "OK");
                 await Toast.Make("Por favor, selecione um mês de referência.",
                      ToastDuration.Long)
                        .Show();
                 return;
             }
 
-            // Armazena o histórico de contas pagas com as respectivas datas
+            // Armazena o histórico de contas pagas com as respectivas datas e valores
             var contasPagasHistorico = contas.Select(c => new HistoricoConta
             {
                 Name = c.Name,
-                Date = !string.IsNullOrEmpty(c.Date) ? DateTime.Parse(c.Date) : default
+                Date = !string.IsNullOrEmpty(c.Date) ? DateTime.Parse(c.Date) : default,
+                Valor = c.Valor
             }).ToList();
 
-            // Salva cada item do histórico no banco de dados
             foreach (var historico in contasPagasHistorico)
             {
-                await _databaseService.SaveHistoricoAsync(historico);
+                // Verifica se o histórico já existe no banco de dados
+                var historicoExistente = await _databaseService.GetHistoricosAsync();
+                if (!historicoExistente.Any(h => h.Name == historico.Name && h.Date == historico.Date && h.Valor == historico.Valor))
+                {
+                    await _databaseService.SaveHistoricoAsync(historico);
+                }
             }
 
             // Exibe uma mensagem de sucesso

@@ -33,10 +33,15 @@ namespace Pagamentos
 
             foreach (var item in historicosOrdenados)
             {
+                // Verifique se o campo Valor está sendo preenchido
+                if (string.IsNullOrEmpty(item.Valor))
+                {
+                    item.Valor = "0,00"; // Valor padrão caso esteja vazio
+                }
+
                 HistoricoContas.Add(item);
             }
         }
-
     }
 }
 

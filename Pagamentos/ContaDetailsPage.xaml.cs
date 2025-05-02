@@ -63,6 +63,7 @@ namespace Pagamentos
                 await _databaseService.SaveContaAsync(_conta);
 
                 await DisplayAlert("Sucesso", "Conta atualizada com sucesso!", "OK");
+               
                 await Navigation.PopAsync();
             }
         }
