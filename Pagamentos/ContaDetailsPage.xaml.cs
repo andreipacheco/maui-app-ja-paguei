@@ -1,4 +1,5 @@
 using Pagamentos.Utils;
+using OneSignalSDK.DotNet;
 
 namespace Pagamentos
 {
@@ -28,6 +29,7 @@ namespace Pagamentos
                 ContaNameLabel.Text = _conta.Name;
                 ContaStatusLabel.Text = _conta.IsPaid ? "Paga" : "Não Paga";
                 ContaDateLabel.Text = string.IsNullOrEmpty(_conta.Date) ? "N/A" : _conta.Date;
+                AvisarVencimentoCheckBox.IsChecked = _conta.AvisarVencimento;
 
                 // Preenche os campos opcionais
                 ValorEntry.Text = _conta.Valor;
@@ -59,11 +61,53 @@ namespace Pagamentos
 
                 _conta.DataVencimento = DataVencimentoPicker.Date.ToString("dd/MM/yyyy");
 
+                // Atualiza o campo AvisarVencimento com o estado do CheckBox
+                _conta.AvisarVencimento = AvisarVencimentoCheckBox.IsChecked;
+
                 // Salva as alterações no banco de dados
                 await _databaseService.SaveContaAsync(_conta);
 
+                // Agendar notificação no OneSignal se AvisarVencimento estiver marcado
+                if (_conta.AvisarVencimento)
+                {
+                    var oneSignalService = new OneSignalService();
+
+                    // Obtém o idPlayer do banco de dados
+                    var idPlayer = await _databaseService.GetPlayerIdAsync();
+                    if (!string.IsNullOrEmpty(idPlayer))
+                    {
+                        // Define o título e o conteúdo da notificação
+                        string titulo = "Lembrete de Pagamento!";
+                        string conteudo = $"A conta '{_conta.Name}' vence hoje! Valor: {_conta.Valor}";
+
+                        // Define a data de envio como a data de vencimento
+                        if (DateTime.TryParse(_conta.DataVencimento, out DateTime dataVencimento))
+                        {
+                            // Verifica se a data de vencimento está no passado
+                            if (dataVencimento < DateTime.Now)
+                            {
+                                Console.WriteLine($"[AVISO] Data de vencimento no passado para a conta '{_conta.Name}'. Ajustando para 10 minutos no futuro.");
+                                dataVencimento = DateTime.Now.AddMinutes(10); // Ajusta para 10 minutos no futuro
+                            }
+
+                            // Converte a data para UTC
+                            var dataEnvioUTC = dataVencimento.ToUniversalTime();
+
+                            await oneSignalService.EnviarNotificacaoAsync(idPlayer, titulo, conteudo, dataEnvioUTC);
+                        }
+                        else
+                        {
+                            Console.WriteLine($"[ERRO] Data de vencimento inválida para a conta '{_conta.Name}'.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("[ERRO] ID do usuário não encontrado no banco de dados.");
+                    }
+                }
+
                 await DisplayAlert("Sucesso", "Conta atualizada com sucesso!", "OK");
-               
+
                 await Navigation.PopAsync();
             }
         }

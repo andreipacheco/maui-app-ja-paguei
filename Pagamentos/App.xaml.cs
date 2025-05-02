@@ -35,8 +35,8 @@ namespace Pagamentos
             }
             string pushId = OneSignal.User.PushSubscription.Id;
 
-            Console.WriteLine($" >>>>>>>>>>>> OneSignal Push ID: {pushId}");
-            Console.WriteLine($" >>>>>>>>>>>> OneSignal Inscrição: {OneSignal.User.PushSubscription.OptedIn}");
+            Console.WriteLine($"[OneSignal] Push ID: {pushId}");
+            Console.WriteLine($"[OneSignal] Inscrição: {OneSignal.User.PushSubscription.OptedIn}");
 
             //var push = OneSignal.User.PushSubscription;
             MainPage = new NavigationPage(new MainPage());

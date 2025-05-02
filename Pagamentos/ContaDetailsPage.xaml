@@ -61,6 +61,16 @@
                     Format="dd/MM/yyyy"
                     TextColor="#333333" />
 
+        <!-- Avisar sobre o vencimento -->
+        <Label Text="Me avisar sobre o vencimento dessa conta:"
+               TextColor="#20C997" 
+               FontSize="Medium"
+               FontAttributes="Bold" />
+        <CheckBox x:Name="AvisarVencimentoCheckBox"
+                  IsChecked="{Binding AvisarVencimento}"
+                  VerticalOptions="Center"
+                  HorizontalOptions="StartAndExpand"/>
+
         <!-- Botão para Salvar -->
         <Button Text="Salvar"
                 BackgroundColor="#20C997"

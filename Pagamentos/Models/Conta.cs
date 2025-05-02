@@ -5,6 +5,7 @@ public class Conta : INotifyPropertyChanged
 {
     private string name;
     private bool isPaid;
+    private bool avisarVencimento;
     private string date;
     private string valor;
     private string dataVencimento;
@@ -73,6 +74,19 @@ public class Conta : INotifyPropertyChanged
             {
                 dataVencimento = value;
                 OnPropertyChanged(nameof(DataVencimento));
+            }
+        }
+    }
+
+    public bool AvisarVencimento
+    {
+        get => avisarVencimento;
+        set
+        {
+            if (avisarVencimento != value)
+            {
+                avisarVencimento = value;
+                OnPropertyChanged(nameof(AvisarVencimento));
             }
         }
     }

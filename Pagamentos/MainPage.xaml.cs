@@ -103,7 +103,7 @@ namespace Pagamentos
                     if (!string.IsNullOrEmpty(idPlayer))
                     {
                         // Envia a notificação com o idPlayer
-                        await oneSignal.EnviarNotificacaoAsync(idPlayer);
+                        await oneSignal.EnviarNotificacaoTesteAsync(idPlayer);
                         Console.WriteLine("Notificação enviada com sucesso para o idPlayer.");
                     }
                     else
@@ -128,7 +128,7 @@ namespace Pagamentos
 
             if (!string.IsNullOrEmpty(idPlayer))
             {
-                await oneSignal.EnviarNotificacaoAsync(idPlayer); // Passa o idPlayer como parâmetro
+                await oneSignal.EnviarNotificacaoTesteAsync(idPlayer); // Passa o idPlayer como parâmetro
             }
             else
             {
@@ -235,6 +235,7 @@ namespace Pagamentos
             {
                 Name = NovaConta.Text,
                 IsPaid = false,
+                AvisarVencimento = false,
                 Date = DateTime.Now.ToString("dd/MM/yyyy"), // Adiciona a data atual
                 DataVencimento = DateTime.Now.ToString("dd/MM/yyyy"), // Adiciona a data atual
                 Valor = "0,00"
