@@ -154,11 +154,11 @@
             </Frame>
 
             <!-- Versão do app -->
-            <Label Text="v1.6"
+            <Label Text="v1.7"
                    VerticalOptions="EndAndExpand"
                    HorizontalOptions="Center"
                    FontSize="Small"
-                   TextColor="#999999"/>
+                   TextColor="#198FE3"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

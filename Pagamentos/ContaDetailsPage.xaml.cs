@@ -70,25 +70,26 @@ namespace Pagamentos
                 // Agendar notificação no OneSignal se AvisarVencimento estiver marcado
                 if (_conta.AvisarVencimento)
                 {
-                    var oneSignalService = new OneSignalService();
-
-                    // Obtém o idPlayer do banco de dados
-                    var idPlayer = await _databaseService.GetPlayerIdAsync();
-                    if (!string.IsNullOrEmpty(idPlayer))
+                    // Verifica se a data de vencimento é válida
+                    if (DateTime.TryParse(_conta.DataVencimento, out DateTime dataVencimento))
                     {
-                        // Define o título e o conteúdo da notificação
-                        string titulo = "Lembrete de Pagamento!";
-                        string conteudo = $"A conta '{_conta.Name}' vence hoje! Valor: {_conta.Valor}";
-
-                        // Define a data de envio como a data de vencimento
-                        if (DateTime.TryParse(_conta.DataVencimento, out DateTime dataVencimento))
+                        // Verifica se a data atual é maior que a data de vencimento
+                        if (DateTime.Now > dataVencimento)
                         {
-                            // Verifica se a data de vencimento está no passado
-                            if (dataVencimento < DateTime.Now)
-                            {
-                                Console.WriteLine($"[AVISO] Data de vencimento no passado para a conta '{_conta.Name}'. Ajustando para 10 minutos no futuro.");
-                                dataVencimento = DateTime.Now.AddMinutes(10); // Ajusta para 10 minutos no futuro
-                            }
+                            await DisplayAlert("Aviso", "A data de vencimento já passou. Não é possível agendar uma notificação.", "OK");
+                            AvisarVencimentoCheckBox.IsChecked = false; // Desmarca o checkbox
+                            return; // Não gera o agendamento
+                        }
+
+                        var oneSignalService = new OneSignalService();
+
+                        // Obtém o idPlayer do banco de dados
+                        var idPlayer = await _databaseService.GetPlayerIdAsync();
+                        if (!string.IsNullOrEmpty(idPlayer))
+                        {
+                            // Define o título e o conteúdo da notificação
+                            string titulo = "Lembrete de Pagamento!";
+                            string conteudo = $"A conta '{_conta.Name}' vence hoje! Valor: {_conta.Valor}";
 
                             // Converte a data para UTC
                             var dataEnvioUTC = dataVencimento.ToUniversalTime();
@@ -97,12 +98,12 @@ namespace Pagamentos
                         }
                         else
                         {
-                            Console.WriteLine($"[ERRO] Data de vencimento inválida para a conta '{_conta.Name}'.");
+                            Console.WriteLine("[ERRO] ID do usuário não encontrado no banco de dados.");
                         }
                     }
                     else
                     {
-                        Console.WriteLine("[ERRO] ID do usuário não encontrado no banco de dados.");
+                        Console.WriteLine($"[ERRO] Data de vencimento inválida para a conta '{_conta.Name}'.");
                     }
                 }
 
@@ -111,5 +112,6 @@ namespace Pagamentos
                 await Navigation.PopAsync();
             }
         }
+
     }
 }

@@ -67,6 +67,7 @@
                FontSize="Medium"
                FontAttributes="Bold" />
         <CheckBox x:Name="AvisarVencimentoCheckBox"
+                  Color="#198FE3"
                   IsChecked="{Binding AvisarVencimento}"
                   VerticalOptions="Center"
                   HorizontalOptions="StartAndExpand"/>
