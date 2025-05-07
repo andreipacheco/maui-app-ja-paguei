@@ -150,11 +150,20 @@
                             CornerRadius="10"
                             HeightRequest="45"
                             Clicked="historicoMesReferencia_Clicked"/>
+
+                    <Button Text="Relatório Mensal"
+                            BackgroundColor="#20C997"
+                            ImageSource="relatorio.png"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="45"
+                            Clicked="OnRelatorioMensalClicked" />   
+
                 </VerticalStackLayout>
             </Frame>
 
             <!-- Versão do app -->
-            <Label Text="v1.7"
+            <Label Text="v1.8"
                    VerticalOptions="EndAndExpand"
                    HorizontalOptions="Center"
                    FontSize="Small"

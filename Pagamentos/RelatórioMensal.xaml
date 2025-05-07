@@ -1,0 +1,60 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Pagamentos.RelatorioMensalPage"
+             Title="Relatório Mensal"
+             BackgroundColor="#FFFFFF">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <Label Text="Relatório Mensal"
+                   TextColor="#198FE3"
+                   FontSize="Large"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <!-- Seleção de Mês e Ano -->
+            <HorizontalStackLayout Spacing="10">
+                <Picker x:Name="MesPicker"
+                        Title="Selecione o Mês"
+                        TextColor="Black"
+                        ItemsSource="{Binding Meses}" />
+                <Picker x:Name="AnoPicker"
+                        Title="Selecione o Ano"
+                        TextColor="Black"
+                        ItemsSource="{Binding Anos}" />
+            </HorizontalStackLayout>
+
+            <!-- Botão para Gerar Relatório -->
+            <Button Text="Gerar Relatório"
+                    BackgroundColor="#20C997"
+                    TextColor="White"
+                    CornerRadius="10"
+                    HeightRequest="45"
+                    Clicked="OnGerarRelatorioClicked" />
+
+            <!-- Resumo do Relatório -->
+            <Label Text="Resumo:"
+                   FontSize="Medium"
+                   TextColor="#198FE3"
+                   FontAttributes="Bold" />
+            <Label x:Name="ResumoLabel"
+                   FontAttributes="Italic"
+                   FontSize="Small"
+                   TextColor="#333333" />
+
+            <!-- Lista de Contas -->
+            <CollectionView x:Name="ContasCollectionView"
+                    ItemsSource="{Binding Contas}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout Padding="10">
+                            <Label Text="{Binding Name}" TextColor="Black" FontAttributes="Bold" />
+                            <Label Text="{Binding Valor}" TextColor="Black"/>
+                            <Label Text="{Binding IsPaid, Converter={StaticResource BooleanToTextConverter}}" TextColor="Black" />
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

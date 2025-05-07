@@ -6,6 +6,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <local:PagoImageConverter x:Key="PagoImageConverter" />
+            <local:BooleanToTextConverter x:Key="BooleanToTextConverter" TrueText="Paga" FalseText="Não Paga" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />

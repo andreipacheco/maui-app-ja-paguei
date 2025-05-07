@@ -55,6 +55,12 @@ namespace Pagamentos
             // Carrega dados
             LoadContasFromDb();
         }
+
+        private async void OnRelatorioMensalClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new RelatorioMensalPage());
+        }
+
         private async void OnDetailsButtonClicked(object sender, EventArgs e)
         {
             if (sender is Button button && button.CommandParameter is Conta selectedConta)
