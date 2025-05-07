@@ -37,4 +37,5 @@ Já Paguei é um aplicativo multi-plataforma desenvolvido com .NET MAUI para And
   <img src="./Screenshot_1746204346.png" width="200" alt="App">
   <img src="./Screenshot_1746204353.png" width="200" alt="App">
   <img src="./Screenshot_1746204876.png" width="200" alt="App">
+  <img src="./Screenshot_1746624058.png" width="200" alt="App">
 </p>
