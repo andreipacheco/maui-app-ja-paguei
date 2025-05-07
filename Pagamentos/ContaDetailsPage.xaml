@@ -28,6 +28,7 @@
                FontAttributes="Bold" />
         <Label x:Name="ContaStatusLabel"
                FontSize="Medium"
+               FontAttributes="Bold"
                TextColor="#333333" />
 
         <!-- Data de Pagamento -->

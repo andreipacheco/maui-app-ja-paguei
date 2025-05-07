@@ -28,6 +28,7 @@ namespace Pagamentos
             {
                 ContaNameLabel.Text = _conta.Name;
                 ContaStatusLabel.Text = _conta.IsPaid ? "Paga" : "Não Paga";
+                ContaStatusLabel.TextColor = _conta.IsPaid ? Colors.Green : Colors.Red; // Define a cor com base no status
                 ContaDateLabel.Text = string.IsNullOrEmpty(_conta.Date) ? "N/A" : _conta.Date;
                 AvisarVencimentoCheckBox.IsChecked = _conta.AvisarVencimento;
 
