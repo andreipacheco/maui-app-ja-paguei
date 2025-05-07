@@ -51,7 +51,6 @@ namespace Pagamentos
             decimal totalValorNaoPagas = contasFiltradas.Where(c => !c.IsPaid).Sum(c => decimal.Parse(c.Valor));
 
             // Atualiza o resumo
-            // Atualiza o resumo
             ResumoLabel.Text = $"Pagas: {totalPagas}\n" +
                                $"Não Pagas: {totalNaoPagas}\n" +
                                $"Total Pago: {totalValorPagas:C}\n" +
