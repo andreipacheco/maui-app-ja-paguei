@@ -115,7 +115,7 @@
 
                                     <!-- Botão de Detalhes -->
                                     <Button Grid.Column="2"
-                                            ImageSource="info.png"
+                                            ImageSource="more.png"
                                             BackgroundColor="#20C997"
                                             TextColor="#ffffff"
                                             CornerRadius="10"

@@ -67,11 +67,19 @@
                TextColor="#20C997" 
                FontSize="Medium"
                FontAttributes="Bold" />
-        <CheckBox x:Name="AvisarVencimentoCheckBox"
-                  Color="#198FE3"
-                  IsChecked="{Binding AvisarVencimento}"
-                  VerticalOptions="Center"
-                  HorizontalOptions="StartAndExpand"/>
+
+        <Grid ColumnDefinitions="Auto, *" VerticalOptions="Center">
+            <CheckBox x:Name="AvisarVencimentoCheckBox"
+                      Color="#198FE3"
+                      IsChecked="{Binding AvisarVencimento}"
+                      VerticalOptions="Center"
+                      HorizontalOptions="Start" />
+            <Label Text="Receber notificação"
+                   TextColor="#333333"
+                   FontSize="Medium"
+                   VerticalOptions="Center"
+                   Grid.Column="1" />
+        </Grid>
 
         <!-- Botão para Salvar -->
         <Button Text="Salvar"
