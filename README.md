@@ -29,6 +29,7 @@ Já Paguei é um aplicativo multi-plataforma desenvolvido com .NET MAUI para And
 6. **Renomear Conta**: Para renomear uma conta, clique no botão de renomear ao lado da conta.
 7. **Salvar Histórico de pagamentos**: Pague todas as contas do mês atual, e salve o histórico.
 8. **Histórico das contas pagas**: Liste o histórico das contas pagas.
+9. **Relatório Mensal**: Liste o histórico por mês das contas pagas, não pagas, e um total em Real de quanto foi gasto.
 
 ## Imagens do Aplicativo 📱
 

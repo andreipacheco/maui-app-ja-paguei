@@ -61,8 +61,7 @@
                    FontSize="Large"
                    FontAttributes="Bold"
                    TextColor="#333333"/>
-
-            <CollectionView x:Name="ListaContas"
+<CollectionView x:Name="ListaContas"
                 ItemsSource="{Binding Contas}"
                 SelectionMode="None">
                 <CollectionView.ItemTemplate>
@@ -129,6 +128,7 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            
 
             <!-- Histórico -->
             <Frame CornerRadius="15" Padding="10" BackgroundColor="White" HasShadow="True">

@@ -30,6 +30,7 @@ namespace Pagamentos
             LoadMesReferencia();
 
             BindingContext = this;
+            
             // Configura o ItemsSource do ListView
             ListaContas.ItemsSource = contas;
 

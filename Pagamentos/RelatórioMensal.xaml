@@ -33,14 +33,25 @@
                     Clicked="OnGerarRelatorioClicked" />
 
             <!-- Resumo do Relatório -->
-            <Label Text="Resumo:"
-                   FontSize="Medium"
-                   TextColor="#198FE3"
-                   FontAttributes="Bold" />
-            <Label x:Name="ResumoLabel"
-                   FontAttributes="Italic"
-                   FontSize="Small"
-                   TextColor="#333333" />
+            <Grid Margin="10"
+                  RowDefinitions="Auto,Auto"
+                  ColumnDefinitions="*"
+                  RowSpacing="4">   
+
+                <!-- Título Resumo -->
+                <Label Text="Resumo:"
+                       FontSize="Medium"
+                       TextColor="#198FE3"
+                       FontAttributes="Bold"
+                       Grid.Row="0"/>
+
+                <!-- Conteúdo do Resumo -->
+                <Label x:Name="ResumoLabel"
+                       FontAttributes="Bold"
+                       FontSize="Title"
+                       TextColor="#333333"
+                       Grid.Row="1"/>
+            </Grid>
 
             <!-- Lista de Contas -->
             <CollectionView x:Name="ContasCollectionView"
@@ -50,7 +61,6 @@
                         <VerticalStackLayout Padding="10">
                             <Label Text="{Binding Name}" TextColor="Black" FontAttributes="Bold" />
                             <Label Text="{Binding Valor}" TextColor="Black"/>
-                            <Label Text="{Binding IsPaid, Converter={StaticResource BooleanToTextConverter}}" TextColor="Black" />
                         </VerticalStackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
