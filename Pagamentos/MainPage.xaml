@@ -7,6 +7,13 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- Título -->
+            <Label Text="Já Paguei ?"
+                   TextColor="#333333"
+                   FontAttributes="Bold"
+                   FontSize="Medium"
+                   HorizontalOptions="Center"
+            />
             <!-- Lottie -->
             <skia:SKLottieView 
                    Source="money.json"
