@@ -100,13 +100,20 @@
                                    BackgroundColor="White" 
                                    HasShadow="True">
                                 <Grid ColumnDefinitions="*,*,*" VerticalOptions="Center">
-                                    <!-- Nome da Conta -->
-                                    <Label Grid.Column="0"
-                                           Text="{Binding Name}"
-                                           TextColor="#333333"
-                                           VerticalOptions="Center"
-                                           FontSize="Medium"
-                                           HorizontalOptions="Start" />
+                                    <!-- Nome e Valor da Conta -->
+                                    <VerticalStackLayout Grid.Column="0"
+                                                         Spacing="2"
+                                                         HorizontalOptions="Start"
+                                                         VerticalOptions="Center">
+                                        <Label Text="{Binding Name}"
+                                               TextColor="#333333"
+                                               FontSize="Medium"
+                                               HorizontalOptions="Start" />
+                                        <Label Text="{Binding Valor, Converter={StaticResource CurrencyFormatConverter}}"
+                                               FontSize="Small"
+                                               TextColor="#20C997"
+                                               HorizontalOptions="Start" />
+                                    </VerticalStackLayout>
 
                                     <!-- Status de Pagamento -->
                                     <Image Grid.Column="1"
@@ -167,7 +174,7 @@
             </Frame>
 
             <!-- Versão do app -->
-            <Label Text="v1.8"
+            <Label Text="v1.9"
                    VerticalOptions="EndAndExpand"
                    HorizontalOptions="Center"
                    FontSize="Small"

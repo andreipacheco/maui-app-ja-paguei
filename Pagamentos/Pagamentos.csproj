@@ -27,7 +27,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
-		<TargetPlatformVersion>18.5</TargetPlatformVersion>
+		<TargetPlatformVersion>18.0</TargetPlatformVersion>
 		<SupportedOSPlatformVersion>11.0</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
