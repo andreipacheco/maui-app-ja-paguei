@@ -6,23 +6,27 @@
              BackgroundColor="#FFFFFF">
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="20">
-            <!-- Título -->
+        <VerticalStackLayout Padding="5" Spacing="5">
+            <!-- Título 
             <Label Text="Já Paguei ?"
                    TextColor="#333333"
                    FontAttributes="Bold"
                    FontSize="Medium"
                    HorizontalOptions="Center"
-            />
-            <!-- Lottie -->
+            /> -->
+            <!-- Lottie 
             <skia:SKLottieView 
                    Source="money.json"
                    HeightRequest="120"
                    WidthRequest="120"
                    RepeatCount="-1"
-            />
-
-            <!-- Mês de referência -->
+            /> -->
+            <Image Source="ja_paguei.png"
+                   HeightRequest="120"
+                   WidthRequest="120"
+                   HorizontalOptions="Center">
+            </Image>
+                <!-- Mês de referência -->
             <Frame CornerRadius="15" Padding="10" BackgroundColor="White" HasShadow="True">
                 <VerticalStackLayout Spacing="10">
                     <Label Text="Mês de referência:" FontSize="Medium" TextColor="#333333"/>
@@ -139,8 +143,23 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            
 
+            <!-- Totalizador do Mês -->
+            <Frame CornerRadius="15" Padding="15" BackgroundColor="#E8F5E9" HasShadow="True">
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label Text="{Binding TotalGastoMesTexto}"
+               FontSize="Medium"
+               FontAttributes="Bold"
+               TextColor="#333333"
+               VerticalOptions="Center" />
+                    <Label Text="{Binding TotalGastoMes, StringFormat='R$ {0:N2}'}"
+               FontSize="Medium"
+               FontAttributes="Bold"
+               TextColor="#20C997"
+               VerticalOptions="Center" />
+                </HorizontalStackLayout>
+            </Frame>
+            
             <!-- Histórico -->
             <Frame CornerRadius="15" Padding="10" BackgroundColor="White" HasShadow="True">
                 <VerticalStackLayout Spacing="10">
@@ -174,7 +193,7 @@
             </Frame>
 
             <!-- Versão do app -->
-            <Label Text="v1.9"
+            <Label Text="v2.0"
                    VerticalOptions="EndAndExpand"
                    HorizontalOptions="Center"
                    FontSize="Small"

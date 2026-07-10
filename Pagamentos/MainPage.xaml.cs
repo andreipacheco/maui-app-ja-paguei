@@ -7,12 +7,42 @@ using Pagamentos.Utils;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Text.Json;
+using System.Globalization;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 
 namespace Pagamentos
 {
-    public partial class MainPage : ContentPage
+    public partial class MainPage : ContentPage, INotifyPropertyChanged
     {
+        private decimal totalGastoMes;
+        public decimal TotalGastoMes
+        {
+            get => totalGastoMes;
+            set
+            {
+                if (totalGastoMes != value)
+                {
+                    totalGastoMes = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string totalGastoMesTexto;
+        public string TotalGastoMesTexto
+        {
+            get => totalGastoMesTexto;
+            set
+            {
+                if (totalGastoMesTexto != value)
+                {
+                    totalGastoMesTexto = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         ObservableCollection<Conta> contas = new ObservableCollection<Conta>();
         public ObservableCollection<Conta> Contas { get { return contas; } }
         private DatabaseService _databaseService;
@@ -21,6 +51,7 @@ namespace Pagamentos
         {
             InitializeComponent();
 
+            contas.CollectionChanged += (s, e) => CalcularTotalGastoMes();
             // Inicializa o caminho do banco
             string dbPath = Path.Combine(FileSystem.AppDataDirectory, "contas.db3");
             _databaseService = new DatabaseService(dbPath);
@@ -44,6 +75,7 @@ namespace Pagamentos
             // Salva a assinatura de push no SQLite
             SavePushSubscriptionAsync();
 
+            
             // ScheduleMonthlyNotification();
 
             // Adiciona um atraso de 5 segundos antes de chamar ScheduleTestNotification, para dar tempo de salvar o idPush
@@ -51,10 +83,56 @@ namespace Pagamentos
             //{
             //    await Task.Delay(5000); // 5 segundos
             //    await ScheduleTestNotification();
-            //});
+             //});
 
             // Carrega dados
             LoadContasFromDb();
+
+            // Calcula o total após carregar as contas
+            CalcularTotalGastoMes();
+        }
+
+        private void CalcularTotalGastoMes()
+        {
+            decimal total = 0;
+            int mesAtual = DateTime.Now.Month;
+            int anoAtual = DateTime.Now.Year;
+
+            foreach (var conta in contas)
+            {
+                // Verifica se a conta foi paga
+                if (conta.IsPaid && !string.IsNullOrWhiteSpace(conta.Date))
+                {
+                    // Tenta converter a data de pagamento
+                    if (DateTime.TryParseExact(conta.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dataPagamento))
+                    {
+                        // Verifica se o pagamento foi feito no mês corrente
+                        if (dataPagamento.Month == mesAtual && dataPagamento.Year == anoAtual)
+                        {
+                            // Tenta converter o valor (formatos: "1.234,56" ou "1234,56")
+                            string valorLimpo = conta.Valor?.Replace(".", "").Replace(",", ".");
+                            if (decimal.TryParse(valorLimpo, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal valor))
+                            {
+                                total += valor;
+                            }
+                        }
+                    }
+                }
+            }
+
+            TotalGastoMes = total;
+
+            // Atualiza o texto do mês
+            string[] meses = { "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+                      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" };
+            TotalGastoMesTexto = $"Total gasto em {meses[mesAtual - 1]}:";
+        }
+
+        public new event PropertyChangedEventHandler PropertyChanged;
+
+        protected new void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private async void OnRelatorioMensalClicked(object sender, EventArgs e)
@@ -182,6 +260,8 @@ namespace Pagamentos
                     contas[index] = contaAtualizada;
                 }
             }
+            // Recalcula o total do mês
+            CalcularTotalGastoMes();
         }
 
 
@@ -206,6 +286,8 @@ namespace Pagamentos
                     .Show();
                 }
             }
+            // Recalcula o total do mês
+            CalcularTotalGastoMes();
         }
 
         private async void OnEditSwipeInvoked(object sender, EventArgs e)
