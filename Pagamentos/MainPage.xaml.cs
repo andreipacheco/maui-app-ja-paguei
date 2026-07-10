@@ -140,6 +140,11 @@ namespace Pagamentos
             await Navigation.PushAsync(new RelatorioMensalPage());
         }
 
+        private async void OnContatosClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ContatosPage());
+        }
+
         private async void OnDetailsButtonClicked(object sender, EventArgs e)
         {
             if (sender is Button button && button.CommandParameter is Conta selectedConta)

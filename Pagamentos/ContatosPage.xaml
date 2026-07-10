@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Pagamentos.ContatosPage"
+             Title="Contatos PIX"
+             BackgroundColor="#FFFFFF">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="15" Spacing="15">
+
+            <!-- Título -->
+            <Label Text="Gerenciar Contatos PIX"
+                   FontSize="Large"
+                   FontAttributes="Bold"
+                   TextColor="#333333"
+                   HorizontalOptions="Center"/>
+
+            <!-- Adicionar novo contato -->
+            <Frame CornerRadius="15" Padding="10" BackgroundColor="White" HasShadow="True">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Adicionar Contato"
+                           FontSize="Medium"
+                           FontAttributes="Bold"
+                           TextColor="#333333"/>
+
+                    <Entry x:Name="NomeEntry"
+                           TextColor="#333333"
+                           Placeholder="Nome do contato (ex: Psicólogo)"
+                           HorizontalOptions="FillAndExpand"/>
+
+                    <Entry x:Name="ChavePixEntry"
+                           TextColor="#333333"
+                           Placeholder="Chave PIX"
+                           HorizontalOptions="FillAndExpand"/>
+
+                    <Button x:Name="AdicionarContatoBtn"
+                            Text="Adicionar Contato"
+                            ImageSource="add.png"
+                            BackgroundColor="#20C997"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="45"
+                            Clicked="OnAdicionarContatoClicked" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Lista de Contatos -->
+            <Label Text="Meus Contatos:"
+                   FontSize="Large"
+                   FontAttributes="Bold"
+                   TextColor="#333333"/>
+
+            <CollectionView x:Name="ListaContatos"
+                            SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem
+                                        Text="Excluir"
+                                        BackgroundColor="#F44336"
+                                        IconImageSource="delete.png"
+                                        CommandParameter="{Binding .}"
+                                        Invoked="OnDeleteContatoSwipeInvoked" />
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+
+                            <Frame CornerRadius="15" 
+                                   Padding="15" 
+                                   Margin="0,5" 
+                                   BackgroundColor="White" 
+                                   HasShadow="True">
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="10">
+                                    <!-- Nome do Contato -->
+                                    <Label Grid.Column="0" Grid.Row="0"
+                                           Text="{Binding Nome}"
+                                           TextColor="#333333"
+                                           FontSize="Medium"
+                                           FontAttributes="Bold"
+                                           VerticalOptions="Center" />
+
+                                    <!-- Chave PIX -->
+                                    <Label Grid.Column="0" Grid.Row="1"
+                                           Text="{Binding ChavePix}"
+                                           TextColor="#666666"
+                                           FontSize="Small"
+                                           LineBreakMode="TailTruncation"
+                                           VerticalOptions="Center" />
+
+                                    <!-- Botão Copiar -->
+                                    <Button Grid.Column="1" Grid.RowSpan="2"
+                                            Text="Copiar PIX"
+                                            BackgroundColor="#198FE3"
+                                            TextColor="White"
+                                            CornerRadius="10"
+                                            CommandParameter="{Binding .}"
+                                            Clicked="OnCopiarPixClicked"
+                                            VerticalOptions="Center" />
+                                </Grid>
+                            </Frame>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

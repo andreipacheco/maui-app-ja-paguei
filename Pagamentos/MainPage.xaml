@@ -187,13 +187,22 @@
                             TextColor="White"
                             CornerRadius="10"
                             HeightRequest="45"
-                            Clicked="OnRelatorioMensalClicked" />   
+                            Clicked="OnRelatorioMensalClicked" />
+
+                    <Button x:Name="ContatosBtn"
+                            Text="Contatos PIX"
+                            ImageSource="info.png"
+                            BackgroundColor="#6F42C1"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="45"
+                            Clicked="OnContatosClicked" />
 
                 </VerticalStackLayout>
             </Frame>
 
             <!-- Versão do app -->
-            <Label Text="v2.0"
+            <Label Text="v2.1"
                    VerticalOptions="EndAndExpand"
                    HorizontalOptions="Center"
                    FontSize="Small"

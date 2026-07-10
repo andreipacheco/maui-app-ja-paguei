@@ -16,6 +16,7 @@ namespace Pagamentos.Utils
             _database.CreateTableAsync<HistoricoConta>().Wait();
             _database.CreateTableAsync<MesReferencia>().Wait();
             _database.CreateTableAsync<NotificationUserId>().Wait();
+            _database.CreateTableAsync<Contato>().Wait();
         }
 
         // Métodos para Conta
@@ -71,5 +72,20 @@ namespace Pagamentos.Utils
             var player = await _database.Table<NotificationUserId>().FirstOrDefaultAsync();
             return player?.PlayerId;
         }
+
+        // Métodos para Contato
+        public Task<List<Contato>> GetContatosAsync()
+        {
+            return _database.Table<Contato>().ToListAsync();
+        }
+
+        public async Task<int> SaveContatoAsync(Contato contato)
+        {
+            return contato.Id != 0
+                ? await _database.UpdateAsync(contato)
+                : await _database.InsertAsync(contato);
+        }
+
+        public Task<int> DeleteContatoAsync(Contato contato) => _database.DeleteAsync(contato);
     }
 }
